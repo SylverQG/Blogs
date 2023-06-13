@@ -50,11 +50,20 @@ jobs:
           source venv/bin/activate
           python main.py ${{ secrets.G_T }} ${{ github.repository }} --issue_number '${{ github.event.issue.number }}'
 
+      # - name: Push README
+      #   run: |
+      #     git config --local user.email "${{ env.GITHUB_EMAIL }}"
+      #     git config --local user.name "${{ env.GITHUB_NAME }}"
+      #     git add src/*.md
+      #     git commit -a -m 'update new blog' || echo "nothing to commit"
+      #     git push || echo "nothing to push"
       - name: Push README
-        run: |
-          git config --local user.email "${{ env.GITHUB_EMAIL }}"
-          git config --local user.name "${{ env.GITHUB_NAME }}"
-          git add src/*.md
-          git commit -a -m 'update new blog' || echo "nothing to commit"
-          git push || echo "nothing to push"
+        uses: github-actions-x/commit@v2.6
+        with:
+          github-token: ${{ secrets.GT }}
+          commit-message: "backup issue"
+          files: README.md
+          rebase: 'true'
+          name: ${{ env.GITHUB_EMAIL }}
+          email: ${{ env.GITHUB_NAME }}
 
