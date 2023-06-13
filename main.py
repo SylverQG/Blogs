@@ -304,7 +304,7 @@ def save_issue(issue, me, dir_name=BACKUP_DIR):
                 if is_me(c, me):
                     f.write("\n\n---\n\n")
                     f.write(c.body)
-        f.write(f"nn[{issue.title}]({issue.html_url})nn")   
+        f.write(f"\n\n[{issue.title}]({issue.html_url})\n\n")   
 
 if __name__ == "__main__":
     if not os.path.exists(BACKUP_DIR):
