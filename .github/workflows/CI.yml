@@ -28,4 +28,4 @@ jobs:
 
     - name: Build
       run: |
-        python3 mvrk.py --config demo_src/config.py --source_dir ./demo_src/ --build_dir ./build_py39/
+        python3 mvrk.py --config src/config.py --source_dir ./ src/ --build_dir ./dist/
