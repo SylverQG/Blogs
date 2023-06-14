@@ -16,8 +16,8 @@ locale = "Asia/Shanghai"
 category_by_folder = False
 
 # For site
-# site_name = "Maverick"
-# site_logo = "${static_prefix}android-chrome-512x512.png"
+site_name = "Maverick"
+site_logo = "${static_prefix}android-chrome-512x512.png"
 site_build_date = "2023-06-14T12:00+08:00"
 author = "SylverQG"
 email = "doublc_qluv@163.com"
@@ -73,14 +73,14 @@ social_links = [
     }
 ]
 
-valine = {
-    "enable": True,
-    "el": '#vcomments',
-    "appId": "IKRAfuPq0zrz6Wfje8ahHAIP-gzGzoHsz",
-    "appKey": "lFaCWkd4xCs0Ng5UWs1eHNwU",
-    "visitor": True,
-    "recordIP": True
-}
+# valine = {
+#     "enable": True,
+#     "el": '#vcomments',
+#     "appId": "IKRAfuPq0zrz6Wfje8ahHAIP-gzGzoHsz",
+#     "appKey": "lFaCWkd4xCs0Ng5UWs1eHNwU",
+#     "visitor": True,
+#     "recordIP": True
+# }
 
 head_addon = 'Put a ping'
 
