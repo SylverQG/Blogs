@@ -16,15 +16,15 @@ locale = "Asia/Shanghai"
 category_by_folder = False
 
 # For site
-site_name = "Maverick"
+site_name = "Sylver Bullet"
 site_logo = "${static_prefix}android-chrome-512x512.png"
 site_build_date = "2023-06-14T12:00+08:00"
 author = "SylverQG"
 email = "doublc_qluv@163.com"
 author_homepage = "https://SylverQG.github.io"
-description = "This is Maverick, Theme Galileo."
-key_words = ["Maverick", "AlanDecode", "Galileo", "blog"]
-language = 'english'
+# description = "This is Maverick, Theme Galileo."
+key_words = ["Blogs", "SylverQG"]
+language = 'zh-CN'
 external_links = [
     {
         "name": "SylverQG@Blogs",
