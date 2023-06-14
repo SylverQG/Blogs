@@ -13,7 +13,7 @@ My personal blog using issues and GitHub Actions (随意转载，无需署名)
 [RSS Feed](https://raw.githubusercontent.com/{repo_name}/main/feed.xml)
 """
 
-BACKUP_DIR = "src"
+BACKUP_DIR = "BACKUP"
 ANCHOR_NUMBER = 5
 TOP_ISSUES_LABELS = ["Top"]
 TODO_ISSUES_LABELS = ["TODO"]
@@ -278,33 +278,19 @@ def main(token, repo_name, issue_number=None, dir_name=BACKUP_DIR):
         save_issue(issue, me, dir_name)
 
 
-# def save_issue(issue, me, dir_name=BACKUP_DIR):
-#     md_name = os.path.join(
-#         dir_name, f"{issue.number}_{issue.title.replace(' ', '.')}.md"
-#     )
-#     with open(md_name, "w") as f:
-#         f.write(f"# [{issue.title}]({issue.html_url})\n\n")
-#         f.write(issue.body)
-#         if issue.comments:
-#             for c in issue.get_comments():
-#                 if is_me(c, me):
-#                     f.write("\n\n---\n\n")
-#                     f.write(c.body)
 def save_issue(issue, me, dir_name=BACKUP_DIR):
-    time = format_time(issue.created_at.strftime('%Y-%m-%dT%H:%M'))
     md_name = os.path.join(
         dir_name, f"{issue.number}_{issue.title.replace(' ', '.')}.md"
     )
     with open(md_name, "w") as f:
-        f.write(f"---\nlayout: post\ntitle: {issue.title}\nslug: {issue.title}\ndate: {time} 08:00\nstatus: publish\nauthor: SylverQG \ncategories: \n  - stand \ntags:\n  - stand \n  - stand \nexcerpt: \n---\n\n")
-       
+        f.write(f"# [{issue.title}]({issue.html_url})\n\n")
         f.write(issue.body)
         if issue.comments:
             for c in issue.get_comments():
                 if is_me(c, me):
                     f.write("\n\n---\n\n")
                     f.write(c.body)
-        f.write(f"\n\n[{issue.title}]({issue.html_url})\n\n")   
+
 
 if __name__ == "__main__":
     if not os.path.exists(BACKUP_DIR):
