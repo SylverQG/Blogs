@@ -14,6 +14,7 @@
 - github-actions-x/commit@v2.9
 
 - the based READMD.md not change
-- found the `requirements.txt` is not contained
-- add `README,md` in Actionflow?
+  - found the `requirements.txt` is not contained : `Should but not Solved (old git remain another same requirements.txt)`
+  - add `README,md` in Actionflow? : `Solved`
 - whether the file `feed.xml` need init?
+  - add `feed.xml` into Actionflow : `Solved`

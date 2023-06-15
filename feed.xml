@@ -1,4 +1,45 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<feed xmlns="http://www.w3.org/2005/Atom">
-
-</feed>
+<feed xmlns="http://www.w3.org/2005/Atom"><id>https://github.com/SylverQG/Blogs</id><title>RSS feed of SylverQG's Blogs</title><updated>2023-06-15T17:03:10.764529+00:00</updated><author><name>SylverQG</name><email>doublc_qluv@163.com</email></author><link href="https://github.com/SylverQG/Blogs"/><link href="https://raw.githubusercontent.com/SylverQG/Blogs/main/feed.xml" rel="self"/><generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator><entry><id>https://github.com/SylverQG/Blogs/issues/2</id><title>how issues go to the md?</title><updated>2023-06-15T17:03:11.018127+00:00</updated><content type="html"><![CDATA[<ul>
+<li>
+<p>test the way from <a href="https://github.com/yihong0618/gitblog/issues/177">https://github.com/yihong0618/gitblog/issues/177</a></p>
+</li>
+<li>
+<p>and config with <a href="https://github.com/yihong0618/gitblog/issues/177#issuecomment-725241658">https://github.com/yihong0618/gitblog/issues/177#issuecomment-725241658</a></p>
+</li>
+<li>
+<p>git an err with <code>github-actions-x/commit@v2.6</code> how about to v2.8(is not latest 2.9)</p>
+</li>
+<li>
+<p>how about to <a href="https://github.com/SylverQG/Blogs/commit/bd05a17f62380dd5f960108f87089f069eebf6b5">reuse the way of basic gitblog</a></p>
+<ul>
+<li>and fix an err <code>line 43</code></li>
+</ul>
+</li>
+<li>
+<p>actions/checkout@v2 to v3, and retry auto-action</p>
+</li>
+<li>
+<p>a circle back to gitblog setting</p>
+</li>
+<li>
+<p>github-actions-x/commit@v2.9</p>
+</li>
+<li>
+<p>the based READMD.md not change</p>
+<ul>
+<li>found the <code>requirements.txt</code> is not contained : <code>Should but not Solved (old git remain another same requirements.txt)</code></li>
+<li>add <code>README,md</code> in Actionflow? : <code>Solved</code></li>
+</ul>
+</li>
+<li>
+<p>whether the file <code>feed.xml</code> need init?</p>
+<ul>
+<li>add <code>feed.xml</code> into Actionflow : <code>Solved</code></li>
+</ul>
+</li>
+</ul>
+]]></content><link href="https://github.com/SylverQG/Blogs/issues/2" rel="alternate"/><category term="ping"/><published>2023-06-15T12:56:55+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/1</id><title># A New Try as Restart</title><updated>2023-06-15T17:03:11.154038+00:00</updated><content type="html"><![CDATA[<h1>A New Try</h1>
+<p>To make blogs by the issues</p>
+<p>To say goodbye to the old world</p>
+<p>To put the ping in the e-world</p>
+]]></content><link href="https://github.com/SylverQG/Blogs/issues/1" rel="alternate"/><category term="ping"/><published>2023-06-13T14:09:48+00:00</published></entry></feed>
