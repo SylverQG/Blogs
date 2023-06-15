@@ -44,7 +44,7 @@ jobs:
         with:
           github-token: ${{ secrets.G_T }}
           commit-message: "backup issue"
-          files: BACKUP
+          files: backup
           rebase: 'true'
           name: SylverQG 
           email: doublc_qluv@163.com
