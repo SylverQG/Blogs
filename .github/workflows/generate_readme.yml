@@ -43,7 +43,7 @@ jobs:
           python tools/issue2readme.py ${{ secrets.G_T }} ${{ github.repository }}
         
       - name: Push README
-        uses: github-actions-x/commit@v5
+        uses: github-actions-x/commit@v2.8
         with:
           github-token: ${{ secrets.G_T }}
           commit-message: "Refresh README"
