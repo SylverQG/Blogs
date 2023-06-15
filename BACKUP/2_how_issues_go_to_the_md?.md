@@ -16,3 +16,4 @@
 - the based READMD.md not change
 - found the `requirements.txt` is not contained
 - add `README,md` in Actionflow?
+- whether the file `feed.xml` need init?
