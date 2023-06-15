@@ -42,22 +42,11 @@ jobs:
         run: |
           source venv/bin/activate
           python tools/issue2md.py ${{ secrets.G_T }} ${{ github.repository }} ${{ github.event.issue.number }}
-        
-      # - name: Push README
-      #   uses: github-actions-x/commit@v2.8
-      #   with:
-      #     github-token: ${{ secrets.G_T }}
-      #     commit-message: "Refresh README"
-      #     files: README.md
-      #     rebase: 'true'
-      #     name: SylverQG 
-      #     email: doublc_qluv@163.com
-
 
       - name: Push README
-              run: |
-                git config --local user.email "${{ env.GITHUB_EMAIL }}"
-                git config --local user.name "${{ env.GITHUB_NAME }}"
-                git backup/*.md
-                git commit -a -m 'update new blog' || echo "nothing to commit"
-                git push || echo "nothing to push"
+        run: |
+          git config --local user.email "${{ env.GITHUB_EMAIL }}"
+          git config --local user.name "${{ env.GITHUB_NAME }}"
+          git backup/*.md
+          git commit -a -m 'update new blog' || echo "nothing to commit"
+          git push || echo "nothing to push"
