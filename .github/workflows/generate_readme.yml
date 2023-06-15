@@ -54,7 +54,7 @@ jobs:
         with:
           github-token: ${{ secrets.G_T }}
           commit-message: "UPDATE README"
-          files: BACKUP/*.md README.md
+          files: BACKUP/*.md README.md feed.xml
           rebase: 'true'
           name: SylverQG 
           email: doublc_qluv@163.com
