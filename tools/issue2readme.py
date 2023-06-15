@@ -3,7 +3,7 @@ from github import Github
 from github.Issue import Issue
 import argparse
 
-MD_HEAD = """# paper note
+MD_HEAD = """# Note issues Sylver
 """
 
 ANCHOR_NUMBER = 5
