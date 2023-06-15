@@ -9,6 +9,10 @@ on:
     paths:
       - tools/issue2readme.py
 
+env:
+  GITHUB_NAME: SylverQG
+  GITHUB_EMAIL: doublc_qluv@163.com
+
 jobs:
   sync:
     name: Generate README
@@ -42,12 +46,21 @@ jobs:
           source venv/bin/activate
           python tools/issue2readme.py ${{ secrets.G_T }} ${{ github.repository }}
         
-      - name: Push README
-        uses: github-actions-x/commit@v2.8
-        with:
-          github-token: ${{ secrets.G_T }}
-          commit-message: "Refresh README"
-          files: README.md
-          rebase: 'true'
-          name: SylverQG 
-          email: doublc_qluv@163.com
+      # - name: Push README
+      #   uses: github-actions-x/commit@v2.8
+      #   with:
+      #     github-token: ${{ secrets.G_T }}
+      #     commit-message: "Refresh README"
+      #     files: README.md
+      #     rebase: 'true'
+      #     name: SylverQG 
+      #     email: doublc_qluv@163.com
+
+
+        - name: Push README
+                run: |
+                  git config --local user.email "${{ env.GITHUB_EMAIL }}"
+                  git config --local user.name "${{ env.GITHUB_NAME }}"
+                  git backup/*.md
+                  git commit -a -m 'update new blog' || echo "nothing to commit"
+                  git push || echo "nothing to push"

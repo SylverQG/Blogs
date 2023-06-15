@@ -6,6 +6,10 @@ on:
   issue_comment:
     types: [created, edited]
 
+env:
+  GITHUB_NAME: SylverQG
+  GITHUB_EMAIL: doublc_qluv@163.com
+
 jobs:
   sync:
     name: Backup issue
@@ -39,12 +43,21 @@ jobs:
           source venv/bin/activate
           python tools/issue2md.py ${{ secrets.G_T }} ${{ github.repository }} ${{ github.event.issue.number }}
         
-      - name: Push
-        uses: github-actions-x/commit@v2.8
-        with:
-          github-token: ${{ secrets.G_T }}
-          commit-message: "backup issue"
-          files: backup
-          rebase: 'true'
-          name: SylverQG 
-          email: doublc_qluv@163.com
+      # - name: Push README
+      #   uses: github-actions-x/commit@v2.8
+      #   with:
+      #     github-token: ${{ secrets.G_T }}
+      #     commit-message: "Refresh README"
+      #     files: README.md
+      #     rebase: 'true'
+      #     name: SylverQG 
+      #     email: doublc_qluv@163.com
+
+
+      - name: Push README
+              run: |
+                git config --local user.email "${{ env.GITHUB_EMAIL }}"
+                git config --local user.name "${{ env.GITHUB_NAME }}"
+                git backup/*.md
+                git commit -a -m 'update new blog' || echo "nothing to commit"
+                git push || echo "nothing to push"
