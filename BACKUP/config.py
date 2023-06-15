@@ -30,11 +30,6 @@ external_links = [
         "name": "SylverQG@Blogs",
         "url": "https://github.com/SylverQG/Blogs",
         "brief": "Put a ping."
-    },
-    {
-        "name": "SylverQG@Blogs",
-        "url": "https://github.com/SylverQG/Blogs",
-        "brief": "THere is no spoon."
     }
 ]
 nav = [
