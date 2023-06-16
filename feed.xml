@@ -1,44 +1,113 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<feed xmlns="http://www.w3.org/2005/Atom"><id>https://github.com/SylverQG/Blogs</id><title>RSS feed of SylverQG's Blogs</title><updated>2023-06-15T17:03:10.764529+00:00</updated><author><name>SylverQG</name><email>doublc_qluv@163.com</email></author><link href="https://github.com/SylverQG/Blogs"/><link href="https://raw.githubusercontent.com/SylverQG/Blogs/main/feed.xml" rel="self"/><generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator><entry><id>https://github.com/SylverQG/Blogs/issues/2</id><title>how issues go to the md?</title><updated>2023-06-15T17:03:11.018127+00:00</updated><content type="html"><![CDATA[<ul>
+<feed xmlns="http://www.w3.org/2005/Atom"><id>https://github.com/SylverQG/Blogs</id><title>RSS feed of SylverQG's Blogs</title><updated>2023-06-16T00:31:12.183777+00:00</updated><author><name>SylverQG</name><email>doublc_qluv@163.com</email></author><link href="https://github.com/SylverQG/Blogs"/><link href="https://raw.githubusercontent.com/SylverQG/Blogs/main/feed.xml" rel="self"/><generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator><entry><id>https://github.com/SylverQG/Blogs/issues/2</id><title>how issues go to the md?</title><updated>2023-06-16T00:31:12.389553+00:00</updated><content type="html"><![CDATA[<ol>
 <li>
-<p>test the way from <a href="https://github.com/yihong0618/gitblog/issues/177">https://github.com/yihong0618/gitblog/issues/177</a></p>
-</li>
-<li>
-<p>and config with <a href="https://github.com/yihong0618/gitblog/issues/177#issuecomment-725241658">https://github.com/yihong0618/gitblog/issues/177#issuecomment-725241658</a></p>
-</li>
-<li>
-<p>git an err with <code>github-actions-x/commit@v2.6</code> how about to v2.8(is not latest 2.9)</p>
-</li>
-<li>
-<p>how about to <a href="https://github.com/SylverQG/Blogs/commit/bd05a17f62380dd5f960108f87089f069eebf6b5">reuse the way of basic gitblog</a></p>
+<p>本仓库搭建概况</p>
 <ul>
-<li>and fix an err <code>line 43</code></li>
+<li>基于 <a href="https://github.com/yihong0618/gitblog/issues/177">https://github.com/yihong0618/gitblog/issues/177</a> 、</li>
+<li>加上 <a href="https://github.com/egolearner/paper-note.git">https://github.com/egolearner/paper-note.git</a> 的一些配置(Action自动化), </li>
+<li>并更新到较新的<code>ActionFlow</code>版本(当然应该不是最合适的版本，好像还是有<code>Node.js 12 to Node.js 16</code> 的警告)</li>
 </ul>
 </li>
 <li>
-<p>actions/checkout@v2 to v3, and retry auto-action</p>
-</li>
+<p>搭建过程的一些问题(遇到的，并从issue里总结的)</p>
+<ol>
 <li>
-<p>a circle back to gitblog setting</p>
-</li>
-<li>
-<p>github-actions-x/commit@v2.9</p>
-</li>
-<li>
-<p>the based READMD.md not change</p>
-<ul>
-<li>found the <code>requirements.txt</code> is not contained : <code>Should but not Solved (old git remain another same requirements.txt)</code></li>
-<li>add <code>README,md</code> in Actionflow? : <code>Solved</code></li>
+cookbook依旧是<a href="https://github.com/yihong0618/gitblog/issues/177">https://github.com/yihong0618/gitblog/issues/177</a>中的这些步骤，即<ul>
+<li>①生成个人Token，并添加到仓库设置中。</li>
+<li>②文件<code>.github/workflows/generate_readme.yml</code>中<code>env</code>项的<code>name</code>和<code>email</code>设置更改为自己的</li>
 </ul>
 </li>
-<li>
-<p>whether the file <code>feed.xml</code> need init?</p>
-<ul>
-<li>add <code>feed.xml</code> into Actionflow : <code>Solved</code></li>
-</ul>
+<li><code>.github/workflows/generate_readme.yml</code>的其他修改如下：即添加注释的地方</li>
+</ol>
+<pre><code class="language-yml">name: Generate README
+
+on:
+issues:
+    types: [opened, edited]
+issue_comment:
+    types: [created, edited]
+push:
+    branches:
+    - main    # 这里改成main，好像是从一个时间起默认创建的主分支从master变为了main，
+                # 当然如果仓库内都是master也可以不用修改
+    paths:
+    - main.py
+
+env:    # 这两项更改为自己的配置
+GITHUB_NAME: SylverQG
+GITHUB_EMAIL: doublc_qluv@163.com
+
+jobs:
+sync:
+    name: Generate README
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+        uses: actions/checkout@v3   # 我这里改为了v3，与下面`版本变更`一致，都只加1个大版本
+    - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+        python-version: 3.9
+
+    - name: Configure pip cache
+        uses: actions/cache@v2
+        id: pip-cache
+        with:
+        path: venv
+        key: pip-1-${{ hashFiles(&#x27;**/requirements.txt&#x27;) }}
+        restore-keys: |
+            pip-
+    
+    - name: Install dependencies
+        run: |
+        python -m pip install --upgrade pip
+        python -m venv venv
+        source venv/bin/activate
+        pip install -r requirements.txt
+        if: steps.pip-cache.outputs.cache-hit != &#x27;true&#x27;
+    
+    - name: Generate new md
+        run: |
+        source venv/bin/activate
+        python main.py ${{ secrets.G_T }} ${{ github.repository }} --issue_number &#x27;${{ github.event.issue.number }}&#x27;
+    
+    - name: Push README # 这里使用了egolearner/paper-note 中的yml
+                        # 并更新版本到2.9，旧版本似乎会有报错
+        uses: github-actions-x/commit@v2.9
+        with:
+        github-token: ${{ secrets.G_T }}
+        commit-message: &quot;UPDATE README&quot;
+        files: BACKUP/*.md README.md feed.xml # 注意因为main.py文件将这三类文件都暂存到了缓存里，所以应该是一起进行推送
+        rebase: &#x27;true&#x27;
+        name: SylverQG 
+        email: doublc_qluv@163.com
+</code></pre>
 </li>
-</ul>
-]]></content><link href="https://github.com/SylverQG/Blogs/issues/2" rel="alternate"/><category term="ping"/><published>2023-06-15T12:56:55+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/1</id><title># A New Try as Restart</title><updated>2023-06-15T17:03:11.154038+00:00</updated><content type="html"><![CDATA[<h1>A New Try</h1>
+<li>
+<p>警告详情 <code>actions/checkout@v2</code>,<code>actions/setup-python@v1</code>,<code>actions/cache@v1</code>  update to <code>actions/checkout@v3</code>,<code>actions/setup-python@v2</code>,<code>actions/cache@v2</code> </p>
+</li>
+</ol>
+<pre><code class="language-Warning">Generate README
+Node.js 12 actions are deprecated. Please update the following actions to use Node.js 16: actions/setup-python@v2, actions/cache@v2. For more information see: https://github.blog/changelog/2022-09-22-github-actions-all-actions-will-begin-running-on-node16-instead-of-node12/.
+</code></pre>
+<ol start="4">
+<li>错误详情 <code>github-actions-x/commit@v2.6</code> update to v2.9 (the latest)
+the error shows:</li>
+</ol>
+<pre><code class="language-error">Command line: | /usr/bin/git pull --rebase --autostash origin main
+Stderr:       | fatal: detected dubious ownership in repository at &#x27;/github/workspace&#x27;
+              | To add an exception for this directory, call:
+              | 
+              | 	git config --global --add safe.directory /github/workspace
+</code></pre>
+<ol start="5">
+<li>错误详情 <code>生成通过但是仓库没有变更</code> ，此时可以重新生成Token，重新添加到仓库的设置中。[这与本地的错误类似，即没有当前仓库的权限]</li>
+</ol>
+<pre><code class="language-error">remote: Permission to SylverQG/Blogs.git denied to github-actions[bot].
+fatal: unable to access &#x27;https://github.com/SylverQG/Blogs/&#x27;: The requested URL returned error: 403
+nothing to push
+</code></pre>
+]]></content><link href="https://github.com/SylverQG/Blogs/issues/2" rel="alternate"/><category term="ping"/><category term="onfiled"/><published>2023-06-15T12:56:55+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/1</id><title># A New Try as Restart</title><updated>2023-06-16T00:31:12.500330+00:00</updated><content type="html"><![CDATA[<h1>A New Try</h1>
 <p>To make blogs by the issues</p>
 <p>To say goodbye to the old world</p>
 <p>To put the ping in the e-world</p>
