@@ -6,9 +6,9 @@ My personal blog using issues and GitHub Actions (随意转载，无需署名)
  | ---- | ---- | ---- |
 ## 最近更新
 - [how issues go to the md?](https://github.com/SylverQG/Blogs/issues/2)--2023-06-15
-- [# A New Try as Restart](https://github.com/SylverQG/Blogs/issues/1)--2023-06-13
-## onfiled
+- [A New Try as Restart](https://github.com/SylverQG/Blogs/issues/1)--2023-06-13
+## filed
 - [how issues go to the md?](https://github.com/SylverQG/Blogs/issues/2)--2023-06-15
 ## ping
 - [how issues go to the md?](https://github.com/SylverQG/Blogs/issues/2)--2023-06-15
-- [# A New Try as Restart](https://github.com/SylverQG/Blogs/issues/1)--2023-06-13
+- [A New Try as Restart](https://github.com/SylverQG/Blogs/issues/1)--2023-06-13
