@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<feed xmlns="http://www.w3.org/2005/Atom"><id>https://github.com/SylverQG/Blogs</id><title>RSS feed of SylverQG's Blogs</title><updated>2023-06-16T00:38:05.307807+00:00</updated><author><name>SylverQG</name><email>doublc_qluv@163.com</email></author><link href="https://github.com/SylverQG/Blogs"/><link href="https://raw.githubusercontent.com/SylverQG/Blogs/main/feed.xml" rel="self"/><generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator><entry><id>https://github.com/SylverQG/Blogs/issues/2</id><title>how issues go to the md?</title><updated>2023-06-16T00:38:05.510322+00:00</updated><content type="html"><![CDATA[<ol>
+<feed xmlns="http://www.w3.org/2005/Atom"><id>https://github.com/SylverQG/Blogs</id><title>RSS feed of SylverQG's Blogs</title><updated>2023-06-16T01:23:09.507021+00:00</updated><author><name>SylverQG</name><email>doublc_qluv@163.com</email></author><link href="https://github.com/SylverQG/Blogs"/><link href="https://raw.githubusercontent.com/SylverQG/Blogs/main/feed.xml" rel="self"/><generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator><entry><id>https://github.com/SylverQG/Blogs/issues/2</id><title>how issues go to the md?</title><updated>2023-06-16T01:23:09.729483+00:00</updated><content type="html"><![CDATA[<ol>
 <li>
 <p>本仓库搭建概况</p>
 <ul>
@@ -107,8 +107,45 @@ Stderr:       | fatal: detected dubious ownership in repository at &#x27;/github
 fatal: unable to access &#x27;https://github.com/SylverQG/Blogs/&#x27;: The requested URL returned error: 403
 nothing to push
 </code></pre>
-]]></content><link href="https://github.com/SylverQG/Blogs/issues/2" rel="alternate"/><category term="ping"/><category term="filed"/><published>2023-06-15T12:56:55+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/1</id><title>A New Try as Restart</title><updated>2023-06-16T00:38:05.622134+00:00</updated><content type="html"><![CDATA[<h1>A New Try</h1>
+]]></content><link href="https://github.com/SylverQG/Blogs/issues/2" rel="alternate"/><category term="ping"/><category term="filed"/><published>2023-06-15T12:56:55+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/1</id><title>A New Try as Restart</title><updated>2023-06-16T01:23:09.853818+00:00</updated><content type="html"><![CDATA[<h1>A New Try</h1>
 <p>To make blogs by the issues</p>
 <p>To say goodbye to the old world</p>
 <p>To put the ping in the e-world</p>
+<h1>The new ID/github_repository</h1>
+<ul>
+<li>
+Sylver，即Silver，避免被注册哈哈<ul>
+<li>Silver Bullet: 杀狼人的特效武器，万金油，杀手锏，最强杀招，王牌，<code>a simple solution to a complicated problem</code>，</li>
+<li>《名侦探柯南》中的两人有此称呼，琴说是赤井秀一，贝尔摩德认为还有江户川柯南</li>
+<li>希望我有朝一日可以值此新名</li>
+</ul>
+</li>
+<li>QG，名字大写缩写</li>
+</ul>
+<h1>put the ping</h1>
+<blockquote>
+<p>You will die but github long live.</p>
+</blockquote>
+<p>尝试了很多种类的github博客形式。、</p>
+<ul>
+<li>
+从本地编译上传的形式<ul>
+<li>Hexo <a href="https://github.com/iissnan/hexo-theme-next">主题 NexT.Pisces</a></li>
+<li>vuepress2 <a href="https://theme-hope.vuejs.press/zh/">主题 hope</a></li>
+</ul>
+</li>
+<li>
+读取<code>issue</code>并有一套漂亮前端的形式<ul>
+<li>二次元的 <a href="https://github.com/chanshiyucx/aurora">aurora</a> <del>可惜没有高频维护，我自己还没学过[TypeScript 或者 JavaScript]</del></li>
+<li>
+简洁的 <a href="https://github.com/lesnolie/Marverick">Marverick</a> <del>本来想弄这个的，但好像失败了。那就考虑不如直接找到化繁为简</del><ul>
+<li><a href="https://github.com/AlanDecode/Maverick/">Marverick</a> + <a href="https://github.com/yihong0618/gitblog">gitblog</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>终于本仓库暂时使用 <a href="https://github.com/yihong0618/gitblog">gitblog</a></li>
+</ul>
+<h1>Plan</h1>
+<p>之后考虑从<a href="https://github.com/doublc-qluv">原来的GitHub仓库</a>一点一点搬运，<del>还是也把那个<a href="https://doublc-qluv.github.io/">github.io</a>也搞成这样</del>，或者再找个好看的主题也不是不行</p>
 ]]></content><link href="https://github.com/SylverQG/Blogs/issues/1" rel="alternate"/><category term="ping"/><published>2023-06-13T14:09:48+00:00</published></entry></feed>
