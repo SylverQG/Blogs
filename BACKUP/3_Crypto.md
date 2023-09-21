@@ -133,13 +133,14 @@
       3. 用户B验证m使用: $$m=E_{k_{A_1}}(c)=E_{k_{A_1}}(D_{k_{A_2}}) $$
       4. 双钥保密和认证体制
          1. 为了同时实现保密性和准确性，可以采用双重加解密
-            ```mermaid
-            graph LR;
-            A(用户A)--m-->DkA2;
-            DkA2-->EkB1;
-            EkB1-->DkB2;
-            DkB2-->EkA1;
-            EkA1--m-->B(用户B);
-            DkA2--认证-->EkA1;
-            EkB1--保密-->DkB2;
-            ``` 
+```mermaid
+graph LR;
+A(用户A)--m-->DkA2;
+DkA2-->EkB1;
+EkB1-->DkB2;
+DkB2-->EkA1;
+EkA1--m-->B(用户B);
+DkA2--认证-->EkA1;
+EkB1--保密-->DkB2;
+
+``` 
