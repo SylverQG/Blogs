@@ -206,75 +206,65 @@ graph LR
 相应密钥流：110100100001011，求对应递推关系。
 假定敌手还知道密钥流是使用5级线性反馈移位寄存器
 解：分别用密文串中前十个比特和明文串中前十个比特建立如下方程
-$$
+
+```math
 (a_6,a_7,a_8,a_9,a_{10})=(c_5,c_4,c_3,c_2,c_1)
-\left(
-\begin{matrix}
+\begin{pmatrix}
 a_1 & a_2 & a_3 & a_4 & a_5\\
 a_2 & a_3 & a_4 & a_5 & a_6\\
 a_3 & a_4 & a_5 & a_6 & a_7\\
 a_4 & a_5 & a_6 & a_7 & a_8\\
 a_5 & a_6 & a_7 & a_8 & a_9\\
-\end{matrix}
-\right)
+\end{pmatrix}
 \tag{1}
-$$
+```
 即：
-$$
+```math
 (0, 1, 0, 0, 0)=(c_5,c_4,c_3,c_2,c_1)
-\left(
-\begin{matrix}
+\begin{pmatrix}
 1 & 1 & 0 & 1 & 0\\
 1 & 0 & 1 & 0 & 0\\
 0 & 1 & 0 & 0 & 1\\
 1 & 0 & 0 & 1 & 0\\
 0 & 0 & 1 & 0 & 0\\
-\end{matrix}
-\right)
+\end{pmatrix}
 \tag{2}
-$$
+```
 求矩阵的逆矩阵：
-$$
-\left(
-\begin{matrix}
+```math
+\begin{pmatrix}
 1 & 1 & 0 & 1 & 0\\
 1 & 0 & 1 & 0 & 0\\
 0 & 1 & 0 & 0 & 1\\
 1 & 0 & 0 & 1 & 0\\
 0 & 0 & 1 & 0 & 0\\
-\end{matrix}
-\right)^{-1}
+\end{pmatrix}^{-1}
 =
-\left(
-\begin{matrix}
+\begin{pmatrix}
 0 & 1 & 0 & 0 & 1\\
 1 & 0 & 0 & 1 & 0\\
 0 & 0 & 0 & 0 & 1\\
 0 & 1 & 0 & 1 & 1\\
 1 & 0 & 1 & 1 & 0\\
-\end{matrix}
-\right)
+\end{pmatrix}
 \tag{3}
-$$
+```
 从而
-$$
+```math
 (c_5,c_4,c_3,c_2,c_1)=(0, 1, 0, 0, 0)
-\left(
-\begin{matrix}
+\begin{pmatrix}
 0 & 1 & 0 & 0 & 1\\
 1 & 0 & 0 & 1 & 0\\
 0 & 0 & 0 & 0 & 1\\
 0 & 1 & 0 & 1 & 1\\
 1 & 0 & 1 & 1 & 0\\
-\end{matrix}
-\right)
+\end{pmatrix}
 \tag{4}
-$$
-$$
+```
+```math
 (c_5,c_4,c_3,c_2,c_1)=(1, 0, 0, 1, 0)\tag{5}
-$$
+```
 则密钥流的递推关系为
-$$
+```math
 a_{i+5} = c_5 a_i\oplus c_2a_{i+3} =a_i\oplus a_{i+3}
-$$
-7. edn
+```
