@@ -392,3 +392,77 @@ R_i = L_{i-1}\oplus f(R_{i-1},K_i), i=1,2,…,16\\
 \end{cases}
 ```
 DES的第 $i$ 圈加密结构图
+
+```math
+\begin{matrix}
+L_{i-1}(32位)& &  & & R_{i-1}(32位) & &\\
+\downarrow & & & &\downarrow\\
+\downarrow & & \downarrow &\leftarrow &\leftarrow &\leftarrow & K_i\\
+\oplus & \longleftarrow & f & \leftarrow &\downarrow \\
+(L->>R)&&&&(R->>L)\\
+L_i(32位)&&&&R_i(32位)
+\end{matrix}
+```
+
+8. 分组密码的工作模式
+   1. 分类
+      1. 电码本(ECB)模式
+      2. 密码分组链接(CBC)模式
+      3. 密码反馈(CFB)模式
+      4. 输出反馈(OFB)模式
+      5. 计数器(CTR)
+   2. 总评
+      1. ECB模式简单、高速，但最弱，易受重发和替换攻击，一般不采用
+      2. CBC，CFC，OFB模式的选用取决于实际的特殊需求
+      3. 明文不易丢信号，对明文的格式没有特殊的要求的环境可选用CBC模式。需要完整性认证功能时也可以选用该模式
+      4. 容易丢信号环境下，对明文格式有特殊要求的环境，可以选用CFB模式
+      5. 信号特别容易错，但明文冗余特别多，可选用OFB模式
+
+9. AES
+   1.  理论基础
+       1. 字节运算：AES中一个字节三有限域GF(28)上的元素表示，通过倍成函数time()实现
+       2. 字运算：AES中的32位字表示为系数在有限域GF(28)上的次数小于4的多项式，即$a(x)=a_3 x^3+ a_2 x^2 +a_1 x +a_0$
+    2. AES加密
+       1. AES密码是一种迭代式密码结构，但不是Feistel结构
+       2. 对于AES算法，算法的轮数依赖于密钥长度： $将轮数表示N_r，当N_k=4, N_r=10, 当N_k=6, N_r=12 ; 当N_k=12,N_r=14。【其中：密钥的列数记为 N_k, N_k=密钥长度(bits)\div 32(bits)。 N_k 可以取为4、6和8，对应和密钥长度分别为128位、192位和256位】$
+       3. 加密过程：（以128为例）
+          1. AES需要迭代十轮，需要11个子密钥
+          2. 前面9轮完全相同，每轮包括4个阶段，分别是字节代换(SubBytes)、行移位(ShiftRows)、列混淆(MixColumns)和轮密钥加(AddRoundKey)；最后一轮只3个阶段，减少列混淆。
+          3. 例
+```[]mermaid
+graph TB
+start[明文]-->a1(轮密钥加)
+   subgraph 第一轮
+      a1-->a2(字节代换)
+      a2-->a3(行移位)
+      a3-->a4(列混淆)
+      a4-->a5(轮密钥加)
+   end
+   a5--…-->c1(轮密钥加)
+   subgraph 第九轮
+      c1-->c2(字节代换)
+      c2-->c3(行移位)
+      c3-->c4(列混淆)
+      c4-->c5(轮密钥加)
+   end
+   c5-->d1(字节代换)
+   subgraph 第十轮
+      d1-->d2(字节代换)
+      d2-->d3(行移位)
+      d3-->d5(轮密钥加)
+   end
+   subgraph key
+      direction TB
+      b1("子密钥w[0,3]")-->a1
+      b2("子密钥w[4,7]")-->a5
+      b3("子密钥w[36,39]")-->c5
+      b4("子密钥w[40,43]")-->d5
+   end
+   d5-->密文
+```
+![mermaid-diagram-AES.svg](https://cdn.jsdelivr.net/gh/SylverQG/picrepo@main/ChromeBook_Pic/mermaid-diagram-AES.svg)
+   3. AES解密:加密的逆过程
+   4. AES安全性：
+      1. 抵抗差分分析和线性分析（基于轨迹策略）
+      2. 抵抗举密钥攻击
+      3. 对密钥的选择没有任何限制，还没有发现弱密码和半弱密码的存在
