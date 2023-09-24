@@ -350,27 +350,27 @@ n & i & e & c & e
       2. 单表代换：(凯撒、仿射)：对明文消息中出现的同一个字母，在加密时都使用同一固定的字母来代换，不管他在什么地方。
       3. 多表代换：(维吉尼亚、Playfair、转轮)：明文消息中出现的同一个字母，在加密时不是完全被同一固定的字母代换，而是根据其出现的位置次序，用不同的字母代换。
    4. 例：
-```math
-密钥=\begin{Bmatrix}
-a & b & c & d & e & f & g & h & i & j & k & l & m & n & o & p & q & r & s & t & u & v & w & x & y & z\\
-f & q & i & s & h & n & c & v & j & t & y & a & u & w & d & r & e & x & l & b & m & z & o & g & k & p
-\end{Bmatrix}
-```
-```math
-\begin{matrix}
-& to  & be & or & not & to & be\\
-加密 &\downarrow\downarrow & \downarrow\downarrow &\downarrow\downarrow &\downarrow\downarrow\downarrow &\downarrow\downarrow &\downarrow\downarrow\\
-& bd & qh & dx & wdb & bd & qh\\
-解密 &\downarrow\downarrow & \downarrow\downarrow &\downarrow\downarrow &\downarrow\downarrow\downarrow &\downarrow\downarrow &\downarrow\downarrow\\
-& to  & be & or & not & to & be\\
-\end{matrix}
-```
+      ```math
+      密钥=\begin{Bmatrix}
+      a & b & c & d & e & f & g & h & i & j & k & l & m & n & o & p & q & r & s & t & u & v & w & x & y & z\\
+      f & q & i & s & h & n & c & v & j & t & y & a & u & w & d & r & e & x & l & b & m & z & o & g & k & p
+      \end{Bmatrix}
+      ```
+      ```math
+      \begin{matrix}
+      & to  & be & or & not & to & be\\
+      加密 &\downarrow\downarrow & \downarrow\downarrow &\downarrow\downarrow &\downarrow\downarrow\downarrow &\downarrow\downarrow &\downarrow\downarrow\\
+      & bd & qh & dx & wdb & bd & qh\\
+      解密 &\downarrow\downarrow & \downarrow\downarrow &\downarrow\downarrow &\downarrow\downarrow\downarrow &\downarrow\downarrow &\downarrow\downarrow\\
+      & to  & be & or & not & to & be\\
+      \end{matrix}
+      ```
    5. 仿射密码
       1. 加密： 
       ```math
        e_k(x)=x+k(mod\ 26)=y\in C
        ```
-      3. 解密： 
+      2. 解密： 
       ```math
       x=d_k(y)=y-k(mod\ 26)
       ```
