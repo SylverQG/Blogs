@@ -268,3 +268,74 @@ a_5 & a_6 & a_7 & a_8 & a_9\\
 ```math
 a_{i+5} = c_5 a_i\oplus c_2a_{i+3} =a_i\oplus a_{i+3}
 ```
+
+---
+
+# 三、置换密码
+1. 置换
+   1. 置换密码又叫做换位密码，根据一定的规则重新排列明文，打破明文的结构特性。特点是保持明文所有的字符不变，仅仅打乱明文字符的位置和次序。
+2. 常见的置换密码有
+   1. 列置换密码：明文遵照密钥的规则按照列换位并且按照列得到密文
+   2. 周期置换密码：将明文按照固定的长度进行分组，然后对每组按照某种重新排列得到密文
+3. 例：设有限集 $X = \{ 1,2,3,4,5,6,7,8 \}, \sigma$ 为 $X$上的一个置换，并且满足 $\sigma (1)=2, \sigma (2)=5, \sigma (3)=3, \sigma (4)=6, \sigma (5)=1, \sigma (6)=8, \sigma (7)=4, \sigma (8)=7,$ 因为置换可以对换表示，所以上述置换 $\sigma $可以形式化为:
+```math
+\sigma=\begin{pmatrix}
+1 & 2 & 3 & 4 & 5 & 6 & 7 & 8\\
+2 & 5 & 3 & 6 & 1 & 8 & 4 & 7
+\end{pmatrix}
+=
+(125)(3)(4687)
+=
+(125)(4687)
+```
+则其逆置换 $\sigma ^{-1}$可表示为：
+```math
+\sigma ^{-1}=\begin{pmatrix}
+1 & 2 & 3 & 4 & 5 & 6 & 7 & 8\\
+2 & 5 & 3 & 6 & 1 & 8 & 4 & 7
+\end{pmatrix}^{-1} \\
+=
+\begin{pmatrix}
+1 & 2 & 3 & 4 & 5 & 6 & 7 & 8\\
+5 & 1 & 3 & 7 & 2 & 4 & 8 & 6
+\end{pmatrix}
+=(152)(3)(4786)=(152)(4786)
+```
+
+4. 例：
+   - 明文：cryptograph is an applied science
+   - 密钥：encry
+   - 求密文
+
+```math
+\sigma=\begin{pmatrix}
+2 & 3 & 1 & 4 & 5\\
+c & r & y & p & t\\
+o & g & r & a & p\\
+h & y & i & s & a\\ 
+n & a & p & p & l\\ 
+i & e & d & s & c\\
+i & e & n & c & e
+\end{pmatrix}
+=
+\begin{pmatrix}
+1 & 2 & 3 & 4 & 5\\
+y & c & r & p & t\\
+r & o & g & a & p\\
+i & h & y & s & a\\ 
+p & n & a & p & l\\ 
+d & i & e & s & c\\
+n & i & e & c & e
+\end{pmatrix}
+```
+
+则 密文： ycrpt rogap ihysa pnapl diesc niece
+
+5. 周期置换密码
+   1. 周期置换密码是将明文串P按固定长度m分组，然后对每组中的子串按1,2,…,m的某个置换重排位置从而得到密文C。其中密钥 $\sigma $包含分组长度信息。解密时同样对密文C按照长度m分组，并按照 $\sigma$ 的逆置 $\sigma ^{-1}$把每组子串冲核心排列位置从而得到明文P
+   2. 例：
+      1. 明文："State key Laboratory of Networking and  Switching";加密密钥： $\sigma = (1\ 5\ 6\ 2\ 3)$
+      2. 将明文分为7组：(Statek)(eyLabo)(ratory)(ofNetw)(orking)(andSwi)(tching)
+      3. 加密变换：(aKttSe)(Loyaeb)(tyaorr)(Nwfeot)(kgrion)(dinSaw)(hgcitn)
+      4. 最终密文：(aKttSeLoyaebtyaorrNwfeotkgriondinSawhgcitn)
+      5. 由加密密钥易知解密密钥： $\sigma ^{-1}=(1\ 3\ 2\ 6\ 5)$
