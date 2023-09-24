@@ -339,3 +339,38 @@ n & i & e & c & e
       3. 加密变换：(aKttSe)(Loyaeb)(tyaorr)(Nwfeot)(kgrion)(dinSaw)(hgcitn)
       4. 最终密文：(aKttSeLoyaebtyaorrNwfeotkgriondinSawhgcitn)
       5. 由加密密钥易知解密密钥： $\sigma ^{-1}=(1\ 3\ 2\ 6\ 5)$
+
+---
+
+6. 代换密码
+   1. 代换，就是明文中的一个字母由其他字母、数字或者符号替代的一种方法
+   2. 代换密码就是建立一个代换表，加密时将需要加密的明文依次通过查表，替换为相应的字符，明文字符被逐个替换后，生成无任何意义的字符串，即密文。这样的代换表被称之为密钥
+   3. 代换密码的分类
+      1. 依据：按照一个明文字母是否总是被一个固定的字符代换进行划分。
+      2. 单表代换：(凯撒、仿射)：对明文消息中出现的同一个字母，在加密时都使用同一固定的字母来代换，不管他在什么地方。
+      3. 多表代换：(维吉尼亚、Playfair、转轮)：明文消息中出现的同一个字母，在加密时不是完全被同一固定的字母代换，而是根据其出现的位置次序，用不同的字母代换。
+   4. 例：
+```math
+密钥=\begin{Bmatrix}
+a & b & c & d & e & f & g & h & i & j & k & l & m & n & o & p & q & r & s & t & u & v & w & x & y & z\\
+f & q & i & s & h & n & c & v & j & t & y & a & u & w & d & r & e & x & l & b & m & z & o & g & k & p
+\end{Bmatrix}
+```
+```math
+\begin{matrix}
+& to  & be & or & not & to & be\\
+加密 &\downarrow\downarrow & \downarrow\downarrow &\downarrow\downarrow &\downarrow\downarrow\downarrow &\downarrow\downarrow &\downarrow\downarrow\\
+& bd & qh & dx & wdb & bd & qh\\
+解密 &\downarrow\downarrow & \downarrow\downarrow &\downarrow\downarrow &\downarrow\downarrow\downarrow &\downarrow\downarrow &\downarrow\downarrow\\
+& to  & be & or & not & to & be\\
+\end{matrix}
+```
+   5. 仿射密码
+      1. 加密： 
+      ```math
+       e_k(x)=x+k(mod\ 26)=y\in C
+       ```
+      3. 解密： 
+      ```math
+      x=d_k(y)=y-k(mod\ 26)
+      ```
