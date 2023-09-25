@@ -466,3 +466,76 @@ start[明文]-->a1(轮密钥加)
       1. 抵抗差分分析和线性分析（基于轨迹策略）
       2. 抵抗举密钥攻击
       3. 对密钥的选择没有任何限制，还没有发现弱密码和半弱密码的存在
+
+---
+
+# 四、公钥密码
+## 4.1 数学基础
+1. 代数系统
+   代数系统是对要研究的现象或过程建立起的一种数学模型，模型中包括要处理的数学对象的集合以及集合上的关系或运算
+   运算可以三一元的也可以三多元的，可以有一个也可以有多个
+2. 封闭性
+   设 $\ast $是集合S上的运算，若对 $\forall a,b \in S $, $a\ast b \in S $, 则称S对运算 $\ast$是封闭的
+   若 $\ast$是一元运算，若对 $\forall a \in S $, $\ast b \in S $, 则称S对运算 $\ast $是封闭的
+3. 结合律
+   若对 $\ast a,b,c \in S,有 (a \ast b)\ast c = a\ast (b\ast c),$则称 $\ast $满足结合律
+4. 半群
+   1. 设 $\lt G,\ast \gt $是一个代数系统， $\ast $满足：
+      1. 封闭性
+      2. 结合律
+   2. 则称 $\lt G,\ast\gt $是半群
+5. 群
+   设 $\lt G,\ast\gt $是一个代数系统， $\ast $满足：
+      1. 封闭性
+      2. 结合律
+      3. 存在元素e，对 $\forall a\in G,$有  $a \ast e = e\ast a = a$。 $[e称为\lt G,\ast\gt 的单位元]$
+      4. 对 $\forall a\in G,\exists元素a^{-1} $使得 $a\ast a^{-1} = a^{-1} \ast a = e $。 $[称为a^{-1}为元素a的逆元]$
+   
+   则称 $\lt G,\ast\gt $是群
+6. 有限域&无限域
+   如果G是有限集合，则称 $\lt G,\ast\gt $是有限群，否则三无限群。有限群中， $G $的元素个数称为群的阶数
+7. Abel(交换群)
+   如果群 $\lt G, \ast>$中的运算 $\ast $还满足交换律，即对 $\forall a,b \in G, 有 a \ast b = b\ast a$,称 $\lt G, \ast\gt $为Abel群或交换群
+8. 群中运算 $\ast$一般为乘法，称该群为乘法群
+   若运算 $\ast $改为 +，则成为加法群。此时逆元 $a^{-1}写成-a$
+9. 循环群
+   设 $\lt G,\ast\gt $是一个群，I是整数集合。如果存在一个元素 $g\in G$,对于每一个元素 $a\in G$,都有一个相应的 $i\in I$, $能把a表示成g^i$,则称 $\lt G,\ast\gt $,是循环群，g称为循环群的生成元。
+10. 环
+   若代数系统 $\lt R,+,\ast>$的二元运算 $+和\ast$满足：
+       1.  $\lt R,+>$是Abel群
+       2.  $\lt R,\ast>$是半群
+       3. 乘法 $\ast$在加法 $+$上可分配，即：
+         对 $\forall a,b,c \in R,有a\ast (b+c)=a\ast b + a\ast c 和(b+c)\ast a=b\ast a+c\ast a$
+   
+      则称 $\lt R,+,\ast\gt 是环$
+11. 域
+   若代数系统 $\lt F,+,\ast\gt $的二元运算 $+和\ast 满足$:
+      1.  $\lt F,+>$是Abel群
+      2.  $\lt F-\{0\},\ast\gt $是Abel群，其中0是+的单位元
+      3. 乘法 $\ast $在加法+上分配，即：
+         对 $\forall a,b,c \in R,有a\ast (b+c)=a\ast b + a\ast c 和(b+c)\ast a=b\ast a+c\ast a$
+      
+      则称 $\lt F,+,\ast\gt $是域
+12. 有限域
+   有限域是指域中元素个数有限的域，元素个数成为域的阶
+
+13. Galois域
+   若q是素数的幂，即 $q=p^r$，其中p是素数，r是自然数，则阶为q的域称为Galois域，记为GF(q)或是Fq
+
+14. 同余，同余类
+   如果 $(a\ mod\ n)=(b\ mod\ n)$，则称两整数a和b模n同余，记为 $a\equiv b\ mod\ n$。称与a模n同余的数的全体为a的同余类，记为 $\lceil a\rceil$，称a为这个同余类的表示元素
+15. 费马定理[Fermat定理]
+   若P是素数，a是正整数且 $gcd(a,p)=1,则a^{p-1}\equiv 1\ mod\ p$
+   Fermat定理也可以写成如下形式：
+   设p是素数，a是任意正整数， $a^p\equiv a\ mod\ p$
+16. 欧拉函数
+   设n是一正整数，小于n且与n互素的正整数的个数成为n的欧拉函数，记为 $\phi (n)$若n是素数，则显然 $\phi (n)=n-1$
+17. 欧拉定理(Euler)
+   若a和n互素，则 $a^{\phi (n)}\equiv 1\ mod\ n$
+
+18. 欧几里德算法(Euclid)
+   1.  求最大公因子：Euclid算法是基于下面的一个基本结论
+```math
+对任意的非负整数a和正整数b，有gcd(a,b)=gcd(b,a\ mod\ b)
+```
+   2. 求乘法的逆元：如果gcd(a,b)=1,则b在moda下有乘法逆元(不妨设 $b< a$),即存在一个 $x(x< a)$,使得 $b x \equiv (1\ mod\ a) $，推广的Eucild算法先求出gcd(a,b),当gcd(a,b)=1时，则返回b的逆元
