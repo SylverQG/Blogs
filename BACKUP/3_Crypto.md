@@ -547,11 +547,11 @@ start[明文]-->a1(轮密钥加)
    1. 公钥密码算法最大的特点就是采用两个相关的密钥将加解密分开，其中一个密钥是公开的，称为公钥，用于加密；另一个密钥是为用户专用，因而保密，称为密钥，用来解密。因此公钥密码体制也称之为双钥密码体制。
    2. 算法有以下特性：已知密码算法和加密密钥，求解密密钥在计算上的不可行的
 2. 公钥体制加密
-![PKc1](https://cdn.jsdelivr.net/gh/SylverQG/picrepo@main/ChromeBook_Pic/PKc1.png)
+![PKc1](https://raw.githubusercontent.com/SylverQG/picrepo/main/ChromeBook_Pic/PKc1.png)
 3. 公钥密码体制认证
-![PKc2](https://cdn.jsdelivr.net/gh/SylverQG/picrepo@main/ChromeBook_Pic/PKc2.png)
+![PKc2](https://raw.githubusercontent.com/SylverQG/picrepo/main/ChromeBook_Pic/PKc2.png)
 4. 公钥密码体制认证、保密
-![PKc3](https://cdn.jsdelivr.net/gh/SylverQG/picrepo@main/ChromeBook_Pic/PKc3.png)
+![PKc3](https://raw.githubusercontent.com/SylverQG/picrepo/main/ChromeBook_Pic/PKc3.png)
 
 5. 公钥密码算法应该满足的要求
    1. 接收方B产生密钥对(公钥PKB和密钥SKB)在计算上是容易的
@@ -623,7 +623,7 @@ start[明文]-->a1(轮密钥加)
    1. 会话密钥(Ks)：末端通信时使用的临时加密密钥
    2. 主密钥(Km)：加密Ks的密钥
 6. 密钥分发的具体步骤
-![KDCab1](https://cdn.jsdelivr.net/gh/SylverQG/picrepo@main/ChromeBook_Pic/KDCab1.png)
+![KDCab1](https://raw.githubusercontent.com/SylverQG/picrepo/main/ChromeBook_Pic/KDCab1.png)
 
 7. 会话密钥的生命周期
    1. 在安全性域通信时间之间折中考虑
@@ -666,7 +666,7 @@ start[明文]-->a1(轮密钥加)
         1.  当需要密钥时，确实需要能够实时访问目录
         2.  公钥目录管理员成为系统的瓶颈
 14. Diffie-Hellman密钥交换
-![DHkeyex](https://cdn.jsdelivr.net/gh/SylverQG/picrepo@main/ChromeBook_Pic/DHkeyex.png)
+![DHkeyex](https://raw.githubusercontent.com/SylverQG/picrepo/main/ChromeBook_Pic/DHkeyex.png)
 15. 秘密分割
     1.  秘密分给多人掌管，必须有一定数目的掌管秘密的人同时到场才能恢复着一秘密
     2.  (k,n)-秘密分割门陷方案，k称为方案的门陷值
