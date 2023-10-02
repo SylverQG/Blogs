@@ -870,3 +870,29 @@ s &\equiv s_1 M_1 N_1 + s_4 M_4 N_4 \pmod{m_1 m_4}\\
    5. 使用Hash函数
       1. 去掉这类伪造的一个方法是使消息包含足够的多余度，使伪造的消息m只有很小的概率对应“有意义”的消息
       2. 因此，将签名方案和散列函数一起使用，可以排除这种伪造方法
+
+---
+
+
+# 八、密码协议 和 九、可证明安全
+1. 密码分配
+   1. 定义：通信双方中的一方选取一个秘密密钥，然后传送给另一方
+   2. Kerboros密钥分配协议：
+      1. Kerboros密钥分配协议是一种在线式密钥分配协议(on-line key distribution protocol)。所谓在线(on-line)指的是，当两个用户U和V想要进行保密通信时，就根据协议产生一个新的钥匙，而不是实现确定一个密钥。
+      ```math
+      TA \stackrel{E_{K_{U}}(K, ID(V), T, L) , m1}{\longrightarrow} U\\
+      TA \stackrel{E_{K_{V}}(K, ID(U), T, L) , m2}{\longrightarrow} U \stackrel{E_{K_{V}}(K, ID(U), T, L) , m2}{\longrightarrow} V\\
+      U \stackrel{E_{K}(ID(U), T) , m3}{\longrightarrow} V\\
+      V \stackrel{E_{K}(T+1) , m4}{\longrightarrow} U\\
+      ```
+2. 密码协商
+   1. 定义：通信双方可以在一个公开信道上通过相互传送一些消息来共同建立一个共享的秘密密钥。协商中，双方共同建立的秘密密钥通常双方输入消息的一个函数
+   2. Diffie-Hellman
+      1. 设p是一个大素数， $a\in Z_p$是一个本原元，p和a公开
+      2. 用户U随机选取 $a_U, 1 \le a_U \le p-2$
+      3. 用户U计算 $\alpha ^{a_U} \pmod{p}$,并将结果传送给用户V
+      4. 用户V随机选取 $a_V, 1 \le a_V \le p-2$
+      5. 用户V计算 $\alpha \pmod{p}$, 并将结果传送给用户U
+      6. 用户U计算 $k={{\alpha}^{a_V}}^{a_U} \pmod{p}$
+      7. 用户V计算 $k={{\alpha}^{a_U}}^{a_V} \pmod{p}$
+   3. 此协议易受到中间人攻击
