@@ -873,18 +873,19 @@ s &\equiv s_1 M_1 N_1 + s_4 M_4 N_4 \pmod{m_1 m_4}\\
 
 ---
 
-
 # 八、密码协议 和 九、可证明安全
 1. 密码分配
    1. 定义：通信双方中的一方选取一个秘密密钥，然后传送给另一方
    2. Kerboros密钥分配协议：
       1. Kerboros密钥分配协议是一种在线式密钥分配协议(on-line key distribution protocol)。所谓在线(on-line)指的是，当两个用户U和V想要进行保密通信时，就根据协议产生一个新的钥匙，而不是实现确定一个密钥。
-      ```math
-      TA \stackrel{E_{K_{U}}(K, ID(V), T, L) , m1}{\longrightarrow} U\\
-      TA \stackrel{E_{K_{V}}(K, ID(U), T, L) , m2}{\longrightarrow} U \stackrel{E_{K_{V}}(K, ID(U), T, L) , m2}{\longrightarrow} V\\
-      U \stackrel{E_{K}(ID(U), T) , m3}{\longrightarrow} V\\
-      V \stackrel{E_{K}(T+1) , m4}{\longrightarrow} U\\
-      ```
+```math
+\begin{align}
+TA \xrightarrow{E_{K_{U}}(K, ID(V), T, L)} U \\
+TA \xrightarrow{E_{K_{V}}(K, ID(U), T, L)} U \xrightarrow{E_{K_{V}}(K, ID(U), T, L)}V \\
+U \xrightarrow{E_{K}(ID(U), T)} V \\
+V \xrightarrow{E_{K}(T+1)} U \\
+\end{align}
+```
 2. 密码协商
    1. 定义：通信双方可以在一个公开信道上通过相互传送一些消息来共同建立一个共享的秘密密钥。协商中，双方共同建立的秘密密钥通常双方输入消息的一个函数
    2. Diffie-Hellman
@@ -896,3 +897,36 @@ s &\equiv s_1 M_1 N_1 + s_4 M_4 N_4 \pmod{m_1 m_4}\\
       6. 用户U计算 $k={{\alpha}^{a_V}}^{a_U} \pmod{p}$
       7. 用户V计算 $k={{\alpha}^{a_U}}^{a_V} \pmod{p}$
    3. 此协议易受到中间人攻击
+   4. 端对端协议
+```math
+\begin{aligned}
+(Alice) \xrightarrow{1.\ X=g^{X_A}\pmod{p}}(Bob)\\
+(Bob) \xrightarrow{2.\ Y=g^{X_B}\pmod{p_i}E_k (S_B (g^{X_B}, g^{X_A}))} (Alice)\\
+(Alice)\xrightarrow{E_k (S_A (g^{X_A}, g^{X_B})) } (Bob)\\
+\\
+(Alice)[k=Y^{X_A}\pmod{p}=g^{X_A X_B \pmod{p}}]\\
+(Bob)[k=X^{X_B}\pmod{p}=g^{X_A X_B \pmod{p}}]
+\end{aligned}
+```
+   可实现：
+   - 相互实体认证
+   - 显式密钥认证
+   - 密钥协商
+
+4. 身份识别
+Guillou-Quisquater身份识别方案
+```mermaid
+sequenceDiagram
+   participant Alice
+   participant John
+
+   note left of Alice: s:Alice公钥,v:Alice私钥,r:随机数
+   note over Alice: 1. x=r^e mod n
+   Alice->>John: 2. 证据 x
+   John->>Alice: 3. 挑战 c
+   note over Alice : 4.y=r s^c mod n
+   Alice->>John: 4. 应答 y
+   opt 
+      note over Jonh: 5. 判断 x 与y^x v^c是否相等-->是:有可能，否:不可能
+   end
+```
