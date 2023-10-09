@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<feed xmlns="http://www.w3.org/2005/Atom"><id>https://github.com/SylverQG/Blogs</id><title>RSS feed of SylverQG's Blogs</title><updated>2023-10-09T09:22:51.430340+00:00</updated><author><name>SylverQG</name><email>doublc_qluv@163.com</email></author><link href="https://github.com/SylverQG/Blogs"/><link href="https://raw.githubusercontent.com/SylverQG/Blogs/main/feed.xml" rel="self"/><generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator><entry><id>https://github.com/SylverQG/Blogs/issues/5</id><title>ComputerNet</title><updated>2023-10-09T09:22:51.781680+00:00</updated><content type="html"><![CDATA[<h1>一、概述</h1>
+<feed xmlns="http://www.w3.org/2005/Atom"><id>https://github.com/SylverQG/Blogs</id><title>RSS feed of SylverQG's Blogs</title><updated>2023-10-09T12:12:09.131590+00:00</updated><author><name>SylverQG</name><email>doublc_qluv@163.com</email></author><link href="https://github.com/SylverQG/Blogs"/><link href="https://raw.githubusercontent.com/SylverQG/Blogs/main/feed.xml" rel="self"/><generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator><entry><id>https://github.com/SylverQG/Blogs/issues/5</id><title>ComputerNet</title><updated>2023-10-09T12:12:10.444449+00:00</updated><content type="html"><![CDATA[<h1>一、概述</h1>
 <ol>
 <li>
 计算机性能<ol>
@@ -109,8 +109,40 @@
 <li>香农公式表明：信道的带宽或信道中的信噪比越大，信息的极限传输速率就越高。只要信息传输速率低于信道的极限传输速率，就一定存在某种方法实现无差错传输</li>
 </ol>
 </li>
+<li>
+信道复用技术<ol>
+<li>频分复用（FDM）：所有用户在同样的时间占用不同的资源</li>
+<li>时分复用（TDM）（同步时分复用）：所有用户在不同的时间用同样的频带宽度；（更有利于数字信号的传输）</li>
+<li>以上两种复用方法的优点是技术比较成熟，缺点是不够灵活</li>
+<li>统计时分复用（STDM）（异步时分复用）：动态分配时隙；集中器常使用统计时分复用</li>
+<li>波分复用：光的频分复用</li>
+<li>码分多址（码分多址CDMA）：各用户使用不同的码型，因此各用户之间不会造成干扰。每个站分配的码片序列不仅必须各不相同，并且还必须互相正交（相乘为0，0写为-1，1写为+1）。在使用的系统中是使用为随机序列。</li>
+<li>任何一个码片向量和该码片向量自己的规格内积都是 1；</li>
+<li>任何一个码片向量和该码片反码的向量自己的规格内积都是 -1；</li>
+<li>任何一个码片向量和其他该码片向量自己的规格内积都是 0；</li>
 </ol>
-]]></content><link href="https://github.com/SylverQG/Blogs/issues/5" rel="alternate"/><category term="ComputerNet"/><published>2023-10-06T14:56:13+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/4</id><title>DataStructure</title><updated>2023-10-09T09:22:51.997514+00:00</updated><content type="html"><![CDATA[<h1>一、绪论|顺序表</h1>
+</li>
+<li>
+宽带接入技术<ul>
+<li>ADSL（非对称数字用户线）技术：用数字技术对现有模拟电话用户线进行改造。ADSL的极限传输距离取决于数据率和用户线的线经（用户线越细，信号传输时的衰减就越大）</li>
+<li>光纤同轴混合网（HFC网）</li>
+<li>FTTx技术：光纤到户FTTH</li>
+</ul>
+</li>
+<li>例：假定某信道受奈氏准则限制的最高码元速率为20000码元/元。如果采用振幅调制，把码元的振幅划分为16个不同的等级来传送，那么可以获得多高的数据率（b/s）答： $C = R \ast log_{2}{16} = 20000b/s \ast 4 = 80000b/s $</li>
+<li>共有4个站进行CDMA通信。4个站的码片序列为
+A. (-1-1-1+1+1-1+1+1)
+B. (-1-1+1-1+1+1+1-1)
+C. (-1+1-1+1+1+1-1-1)
+D. (-1+1-1-1-1-1+1-1)
+现在受到这样的码片序列S：(-1+1-3+1-1-3+1+1)。问哪个站发送数据了发送数据的站发送的是0还是1？
+解：
+$S\cdot A= (+1-1+3+1-1+3+1+1) / 8=1,  A 发送1$
+$S\cdot B= (+1-1-3-1-1-3+1-1) / 8=-1, B 发送0$
+$S\cdot C= (+1+1+3+1-1-3-1-1) / 8=0,  C 无发送$
+$S\cdot D= (+1+1+3-1+1+3+1-1) / 8=1,  D 发送1$</li>
+</ol>
+]]></content><link href="https://github.com/SylverQG/Blogs/issues/5" rel="alternate"/><category term="ComputerNet"/><published>2023-10-06T14:56:13+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/4</id><title>DataStructure</title><updated>2023-10-09T12:12:10.593517+00:00</updated><content type="html"><![CDATA[<h1>一、绪论|顺序表</h1>
 <ol>
 <li>数据元素、数据项以及数据结构三者之间的关系</li>
 <li>逻辑结构、存储结构（物理结构）的区分</li>
@@ -372,7 +404,7 @@
 </ol>
 </li>
 </ol>
-]]></content><link href="https://github.com/SylverQG/Blogs/issues/4" rel="alternate"/><category term="DataStructure"/><published>2023-10-05T14:52:23+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/3</id><title>Crypto</title><updated>2023-10-09T09:22:52.245614+00:00</updated><content type="html"><![CDATA[<p>现代密码学目录(仅目录)</p>
+]]></content><link href="https://github.com/SylverQG/Blogs/issues/4" rel="alternate"/><category term="DataStructure"/><published>2023-10-05T14:52:23+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/3</id><title>Crypto</title><updated>2023-10-09T12:12:10.741097+00:00</updated><content type="html"><![CDATA[<p>现代密码学目录(仅目录)</p>
 <h1>1. 基础</h1>
 <h2>1.1 威胁</h2>
 <h2>1.2 信息安全模型</h2>
@@ -437,7 +469,7 @@
 <h2>10.2 Kerberos认证系统</h2>
 <h2>10.3 X.509认证业务</h2>
 <h2>10.4 PGP</h2>
-]]></content><link href="https://github.com/SylverQG/Blogs/issues/3" rel="alternate"/><category term="Crypto"/><published>2023-09-21T14:01:39+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/2</id><title>how issues go to the md?</title><updated>2023-10-09T09:22:52.491585+00:00</updated><content type="html"><![CDATA[<ol>
+]]></content><link href="https://github.com/SylverQG/Blogs/issues/3" rel="alternate"/><category term="Crypto"/><published>2023-09-21T14:01:39+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/2</id><title>how issues go to the md?</title><updated>2023-10-09T12:12:10.889558+00:00</updated><content type="html"><![CDATA[<ol>
 <li>
 <p>本仓库搭建概况</p>
 <ul>
@@ -545,7 +577,7 @@ Stderr:       | fatal: detected dubious ownership in repository at &#x27;/github
 fatal: unable to access &#x27;https://github.com/SylverQG/Blogs/&#x27;: The requested URL returned error: 403
 nothing to push
 </code></pre>
-]]></content><link href="https://github.com/SylverQG/Blogs/issues/2" rel="alternate"/><category term="ping"/><category term="filed"/><published>2023-06-15T12:56:55+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/1</id><title>A New Try as Restart</title><updated>2023-10-09T09:22:52.685630+00:00</updated><content type="html"><![CDATA[<h1>A New Try</h1>
+]]></content><link href="https://github.com/SylverQG/Blogs/issues/2" rel="alternate"/><category term="ping"/><category term="filed"/><published>2023-06-15T12:56:55+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/1</id><title>A New Try as Restart</title><updated>2023-10-09T12:12:11.061327+00:00</updated><content type="html"><![CDATA[<h1>A New Try</h1>
 <p>To make blogs by the issues</p>
 <p>To say goodbye to the old world</p>
 <p>To put the ping in the e-world</p>
