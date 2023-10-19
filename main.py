@@ -149,7 +149,7 @@ def add_md_top(repo, md, me):
                 add_issue_info(issue, md)
 
 
-def add_md_firends(repo, md, me):
+def add_md_firends_old(repo, md, me):
     s = FRIENDS_TABLE_HEAD
     friends_issues = list(repo.get_issues(labels=FRIENDS_LABELS))
     for issue in friends_issues:
@@ -163,7 +163,27 @@ def add_md_firends(repo, md, me):
     with open(md, "a+", encoding="utf-8") as md:
         md.write("## 友情链接\n")
         md.write(s)
-
+def add_md_firends(repo, md, me):
+    s = FRIENDS_TABLE_HEAD
+    friends_issues = list(repo.get_issues(labels=FRIENDS_LABELS))
+    if not FRIENDS_LABELS or not friends_issues:
+        return
+    friends_issue_number = friends_issues[0].number
+    for issue in friends_issues:
+        for comment in issue.get_comments():
+            if is_hearted_by_me(comment, me):
+                try:
+                    s += _make_friend_table_string(comment.body or "")
+                except Exception as e:
+                    print(str(e))
+                    pass
+    s = markdown.markdown(s, output_format="html", extensions=["extra"])
+    with open(md, "a+", encoding="utf-8") as md:
+        md.write(
+            f"## [友情链接](https://github.com/{str(me)}/Blogs/issues/{friends_issue_number})\n"
+        )
+        md.write(s)
+        md.write("\n\n")
 
 def add_md_recent(repo, md, me, limit=5):
     count = 0
