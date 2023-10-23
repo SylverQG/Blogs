@@ -149,7 +149,7 @@ def add_md_top(repo, md, me):
                 add_issue_info(issue, md)
 
 
-def add_md_firends_old(repo, md, me):
+def add_md_firends(repo, md, me):
     s = FRIENDS_TABLE_HEAD
     friends_issues = list(repo.get_issues(labels=FRIENDS_LABELS))
     for issue in friends_issues:
@@ -163,7 +163,7 @@ def add_md_firends_old(repo, md, me):
     with open(md, "a+", encoding="utf-8") as md:
         md.write("## 友情链接\n")
         md.write(s)
-def add_md_firends(repo, md, me):
+def add_md_firends_old(repo, md, me):
     s = FRIENDS_TABLE_HEAD
     friends_issues = list(repo.get_issues(labels=FRIENDS_LABELS))
     if not FRIENDS_LABELS or not friends_issues:
