@@ -171,21 +171,7 @@ def add_md_firends(repo, md, me):
         )
         md.write(s)
         md.write("\n\n")
-
-def add_md_firends_old(repo, md, me):
-    s = FRIENDS_TABLE_HEAD
-    friends_issues = list(repo.get_issues(labels=FRIENDS_LABELS))
-    if not FRIENDS_LABELS or not friends_issues:
-@@ -180,11 +167,12 @@ def add_md_firends_old(repo, md, me):
-    s = markdown.markdown(s, output_format="html", extensions=["extra"])
-    with open(md, "a+", encoding="utf-8") as md:
-        md.write(
-            f"## [友情链接](https://github.com/{str(me)}/Blogs/issues/{friends_issue_number})\n"
-            f"## [友情链接](https://github.com/{str(me)}/gitblog/issues/{friends_issue_number})\n"
-        )
-        md.write(s)
-        md.write("\n\n")
-
+        
 def add_md_recent(repo, md, me, limit=5):
     count = 0
     with open(md, "a+", encoding="utf-8") as md:
