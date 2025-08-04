@@ -1,5 +1,329 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<feed xmlns="http://www.w3.org/2005/Atom"><id>https://github.com/SylverQG/Blogs</id><title>RSS feed of SylverQG's Blogs</title><updated>2025-08-02T12:52:38.042070+00:00</updated><author><name>SylverQG</name><email>doublc_qluv@163.com</email></author><link href="https://github.com/SylverQG/Blogs"/><link href="https://raw.githubusercontent.com/SylverQG/Blogs/master/feed.xml" rel="self"/><generator uri="https://lkiesow.github.io/python-feedgen" version="1.0.0">python-feedgen</generator><entry><id>https://github.com/SylverQG/Blogs/issues/8</id><title>Update Note</title><updated>2025-08-02T12:52:38.806268+00:00</updated><content type="html"><![CDATA[<p>我更新了一下Action里面需要的版本，似乎又make了，因为我重新看了一下仓库issues的更新的提示<a href="https://github.com/yihong0618/gitblog/issues/177">https://github.com/yihong0618/gitblog/issues/177</a>需要把Backup文件夹<a href="https://github.com/SylverQG/Blogs/commit/46b48b5f693df83812deef9d5abbd857ce963b25">删除</a>。</p>
+<feed xmlns="http://www.w3.org/2005/Atom"><id>https://github.com/SylverQG/Blogs</id><title>RSS feed of SylverQG's Blogs</title><updated>2025-08-04T16:42:17.827342+00:00</updated><author><name>SylverQG</name><email>doublc_qluv@163.com</email></author><link href="https://github.com/SylverQG/Blogs"/><link href="https://raw.githubusercontent.com/SylverQG/Blogs/master/feed.xml" rel="self"/><generator uri="https://lkiesow.github.io/python-feedgen" version="1.0.0">python-feedgen</generator><entry><id>https://github.com/SylverQG/Blogs/issues/9</id><title>Web Development</title><updated>2025-08-04T16:42:18.634260+00:00</updated><content type="html"><![CDATA[<h1>和风天气API使用指南</h1>
+<p><a href="https://dev.qweather.com/">和风天气API</a></p>
+<p><code>由腾讯元宝辅助生成</code></p>
+<p>基于代码分析，和风天气API目前主要使用JWT认证方式，以下是详细使用说明：</p>
+<h2>一、认证方式</h2>
+<p>和风天气API采用JWT (JSON Web Token) 认证，替代了传统的API Key方式：</p>
+<ol>
+<li>
+<p><strong>密钥生成</strong>：</p>
+<ul>
+<li>需要生成Ed25519密钥对（公钥和私钥）</li>
+<li>私钥用于签名JWT，公钥需上传到和风天气控制台</li>
+</ul>
+<pre><code class="language-bash">openssl genpkey -algorithm ED25519 -out ed25519-private.pem \
+&amp;&amp; openssl pkey -pubout -in ed25519-private.pem &gt; ed25519-public.pem
+</code></pre>
+</li>
+<li>
+<p><strong>JWT生成</strong>：</p>
+<pre><code class="language-python">import jwt
+import time
+from cryptography.hazmat.primitives.serialization import load_pem_private_key
+
+def get_jwt():
+    # 加载私钥
+    with open(&#x27;ed25519-private.pem&#x27;, &#x27;rb&#x27;) as f:
+        private_key = load_pem_private_key(f.read(), password=None)
+    
+    # 设置payload
+    payload = {
+        &#x27;iat&#x27;: int(time.time()) - 30,  # 签发时间（提前30秒避免时间误差）
+        &#x27;exp&#x27;: int(time.time()) + 900,  # 过期时间（15分钟）
+        &#x27;sub&#x27;: PROJECT_ID  # 项目ID
+    }
+    
+    # 设置headers
+    headers = {&#x27;kid&#x27;: KEY_ID}  # 密钥ID
+    
+    # 生成JWT
+    encoded_jwt = jwt.encode(payload, private_key, algorithm=&#x27;EdDSA&#x27;, headers=headers)
+    return encoded_jwt
+</code></pre>
+</li>
+<li>
+<p><strong>使用方式</strong>：</p>
+<ul>
+<li>在HTTP请求头中添加：<code>Authorization: Bearer {JWT令牌}</code></li>
+</ul>
+</li>
+</ol>
+<h2>二、API基本结构</h2>
+<ol>
+<li>
+<p><strong>基础URL</strong>：</p>
+<pre><code>https://{API_HOST}/{version}/{endpoint}
+</code></pre>
+<ul>
+<li>API_HOST: 和风天气分配的专属域名（如<code>abcd.as.qweatherapi.com</code>）</li>
+<li>version: API版本（如<code>v7</code>）</li>
+<li>endpoint: 具体接口（如<code>weather/now</code>）</li>
+</ul>
+</li>
+<li>
+<p><strong>请求方法</strong>：</p>
+<ul>
+<li>主要使用GET请求</li>
+</ul>
+</li>
+<li>
+<p><strong>请求参数</strong>：</p>
+<ul>
+<li>通过URL查询字符串传递</li>
+<li>必需参数：location（城市ID或经纬度）</li>
+<li>可选参数：lang（语言）、number（结果数量）等</li>
+</ul>
+</li>
+</ol>
+<h2>三、常用接口</h2>
+<ol>
+<li>
+<p><strong>城市查询接口</strong>：</p>
+<pre><code class="language-python">def get_city_code(city, jwt_token):
+    url = f&quot;https://{API_HOST}/geo/v2/city/lookup?location={city}&amp;number=1&amp;lang=zh&quot;
+    headers = {&#x27;Authorization&#x27;: f&#x27;Bearer {jwt_token}&#x27;}
+    r = requests.get(url, headers=headers)
+    data = r.json()
+    if data.get(&quot;code&quot;) == &quot;200&quot; and data.get(&quot;location&quot;):
+        return data[&quot;location&quot;][0][&quot;id&quot;]  # 返回城市ID
+    return None
+</code></pre>
+</li>
+<li>
+<p><strong>天气查询接口</strong>：</p>
+<pre><code class="language-python">def get_weather(city_id, jwt_token):
+    url = f&quot;https://{API_HOST}/v7/weather/now?location={city_id}&amp;lang=zh&quot;
+    headers = {&#x27;Authorization&#x27;: f&#x27;Bearer {jwt_token}&#x27;}
+    r = requests.get(url, headers=headers)
+    data = r.json()
+    if data.get(&quot;code&quot;) == &quot;200&quot; and data.get(&quot;now&quot;):
+        return data[&quot;now&quot;]  # 返回天气数据
+    return None
+</code></pre>
+</li>
+</ol>
+<h2>四、响应处理</h2>
+<p>API返回JSON格式数据，包含以下主要字段：</p>
+<ul>
+<li><code>code</code>: 响应状态码（200表示成功）</li>
+<li><code>location</code>: 位置信息（城市查询接口返回）</li>
+<li><code>now</code>: 实时天气数据（天气查询接口返回）</li>
+</ul>
+<p>天气数据字段说明：</p>
+<ul>
+<li><code>temp</code>: 温度</li>
+<li><code>text</code>: 天气状况</li>
+<li><code>windDir</code>: 风向</li>
+<li><code>windScale</code>: 风力</li>
+<li><code>humidity</code>: 湿度</li>
+<li><code>icon</code>: 天气图标代码</li>
+</ul>
+<h2>五、完整示例流程</h2>
+<ol>
+<li>生成JWT令牌</li>
+<li>使用城市名称获取城市ID</li>
+<li>使用城市ID获取天气信息</li>
+<li>解析并展示天气数据</li>
+</ol>
+<pre><code class="language-python"># 完整流程示例
+jwt_token = get_jwt()
+city = &quot;西安&quot;
+city_id = get_city_code(city, jwt_token)
+weather = get_weather(city_id, jwt_token)
+
+if weather:
+    print(f&quot;{city}的天气信息:&quot;)
+    print(f&quot;温度: {weather.get(&#x27;temp&#x27;, &#x27;未知&#x27;)}°C&quot;)
+    print(f&quot;天气: {weather.get(&#x27;text&#x27;, &#x27;未知&#x27;)}&quot;)
+    print(f&quot;风向: {weather.get(&#x27;windDir&#x27;, &#x27;未知&#x27;)}&quot;)
+    print(f&quot;风力: {weather.get(&#x27;windScale&#x27;, &#x27;未知&#x27;)}级&quot;)
+    print(f&quot;湿度: {weather.get(&#x27;humidity&#x27;, &#x27;未知&#x27;)}%&quot;)
+</code></pre>
+<h2>六、注意事项</h2>
+<ol>
+<li>JWT令牌有效期为15分钟，过期后需重新生成</li>
+<li>确保私钥安全存储，不要泄露</li>
+<li>公钥需上传到和风天气控制台</li>
+<li>城市查询接口返回的城市ID是获取天气的关键</li>
+<li>遇到错误时，检查API_HOST、PROJECT_ID和KEY_ID是否正确</li>
+<li>使用<code>requests</code>库时，添加异常处理确保程序稳定性</li>
+</ol>
+<h2>七、代码</h2>
+<h3><code>weather_widget.py</code></h3>
+<pre><code class="language-python">import jwt
+import requests
+import os
+import time
+
+from flask import Flask, jsonify, request
+from flask_cors import CORS 
+
+from cryptography.hazmat.primitives.serialization import load_pem_private_key
+from cryptography.hazmat.backends import default_backend
+
+app = Flask(__name__)
+CORS(app) # CORS 跨域请求支持
+# 配置信息
+API_HOST = &quot;&quot; # https://console.qweather.com/setting?lang=zh
+PROJECT_ID = &quot;&quot; # 项目ID
+KEY_ID = &quot;&quot; # 凭据ID
+PRIVATE_KEY_PATH = os.path.join(os.path.dirname(__file__), &#x27;ed25519-private.pem&#x27;)
+
+def get_jwt():
+    &quot;&quot;&quot;生成JWT令牌&quot;&quot;&quot;
+    with open(PRIVATE_KEY_PATH, &#x27;rb&#x27;) as f:
+        private_key = load_pem_private_key(f.read(), password=None, backend=default_backend())
+
+    payload = {
+        &#x27;iat&#x27;: int(time.time()) - 30,
+        &#x27;exp&#x27;: int(time.time()) + 900,
+        &#x27;sub&#x27;: PROJECT_ID
+    }
+    headers = {&#x27;kid&#x27;: KEY_ID}
+    
+    return jwt.encode(payload, private_key, algorithm=&#x27;EdDSA&#x27;, headers=headers)
+
+def get_city_code(city, jwt_token):
+    &quot;&quot;&quot;获取城市代码&quot;&quot;&quot;
+    url = f&quot;https://{API_HOST}/geo/v2/city/lookup?location={city}&amp;number=1&amp;lang=zh&quot;
+    headers = {&#x27;Authorization&#x27;: f&#x27;Bearer {jwt_token}&#x27;}
+    
+    try:
+        r = requests.get(url, headers=headers)
+        r.raise_for_status()
+        data = r.json()
+        if data.get(&quot;code&quot;) == &quot;200&quot; and data.get(&quot;location&quot;):
+            return data[&quot;location&quot;][0][&quot;id&quot;]
+    except Exception as e:
+        app.logger.error(f&quot;获取城市代码失败: {e}&quot;)
+    return None
+
+def get_weather(city_id, jwt_token):
+    &quot;&quot;&quot;获取天气信息&quot;&quot;&quot;
+    url = f&quot;https://{API_HOST}/v7/weather/now?location={city_id}&amp;lang=zh&quot;
+    headers = {&#x27;Authorization&#x27;: f&#x27;Bearer {jwt_token}&#x27;}
+    
+    try:
+        r = requests.get(url, headers=headers)
+        r.raise_for_status()
+        data = r.json()
+        if data.get(&quot;code&quot;) == &quot;200&quot; and data.get(&quot;now&quot;):
+            return data[&quot;now&quot;]
+    except Exception as e:
+        app.logger.error(f&quot;获取天气失败: {e}&quot;)
+    return None
+
+@app.route(&#x27;/weather&#x27;, methods=[&#x27;GET&#x27;])
+def weather():
+    &quot;&quot;&quot;天气API端点&quot;&quot;&quot;
+    city = request.args.get(&#x27;city&#x27;, &#x27;北京&#x27;)
+    
+    jwt_token = get_jwt()
+    if not jwt_token:
+        return jsonify({&quot;error&quot;: &quot;JWT生成失败&quot;}), 500
+    
+    city_id = get_city_code(city, jwt_token)
+    if not city_id:
+        return jsonify({&quot;error&quot;: f&quot;找不到城市: {city}&quot;}), 404
+    
+    weather_data = get_weather(city_id, jwt_token)
+    if not weather_data:
+        return jsonify({&quot;error&quot;: &quot;天气数据获取失败&quot;}), 500
+    
+    return jsonify({
+        &quot;city&quot;: city,
+        &quot;temperature&quot;: weather_data.get(&#x27;temp&#x27;, &#x27;N/A&#x27;),
+        &quot;condition&quot;: weather_data.get(&#x27;text&#x27;, &#x27;N/A&#x27;),
+        &quot;windDir&quot;: weather_data.get(&#x27;windDir&#x27;, &#x27;N/A&#x27;),
+        &quot;windScale&quot;: weather_data.get(&#x27;windScale&#x27;, &#x27;N/A&#x27;),
+        &quot;humidity&quot;: weather_data.get(&#x27;humidity&#x27;, &#x27;N/A&#x27;),
+        &quot;icon&quot;: weather_data.get(&#x27;icon&#x27;, &#x27;100&#x27;)
+    })
+
+if __name__ == &#x27;__main__&#x27;:
+    app.run(host=&#x27;0.0.0.0&#x27;, port=5000, debug=True)
+</code></pre>
+<h3><code>weather.html</code></h3>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;天气小组件&lt;/title&gt;
+    &lt;style&gt;
+        .weather-widget { font-family: Arial, sans-serif; background: rgba(255,255,255,0.9); padding: 16px; border-radius: 24px; font-size: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); width: 280px; margin: 20px auto; }
+        .weather-form { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+        .weather-form input { padding: 8px 12px; border: 1px solid #e0e0e0; border-radius: 16px; flex-grow: 1; }
+        .weather-form button { padding: 8px 16px; background: #4285f4; color: white; border: none; border-radius: 16px; cursor: pointer; }
+        .weather-info { display: flex; align-items: center; gap: 12px; }
+        .weather-icon { font-size: 32px; min-width: 40px; text-align: center; }
+        .weather-details { line-height: 1.5; }
+        .temperature { font-size: 24px; font-weight: bold; }
+        .condition { font-size: 16px; }
+        .wind-humidity { font-size: 12px; color: #666; }
+    &lt;/style&gt;
+    &lt;link href=&quot;https://cdn.jsdelivr.net/npm/qweather-icons@1.7.0/font/qweather-icons.css&quot; rel=&quot;stylesheet&quot;&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class=&quot;weather-widget&quot;&gt;
+        &lt;div class=&quot;weather-form&quot;&gt;
+            &lt;input type=&quot;text&quot; id=&quot;city-input&quot; placeholder=&quot;输入城市名&quot; value=&quot;西安&quot;&gt;
+            &lt;button id=&quot;get-weather&quot;&gt;查询&lt;/button&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;weather-info&quot; id=&quot;weather-container&quot;&gt;
+            &lt;div class=&quot;weather-icon&quot;&gt;&lt;i class=&quot;qi-999&quot; id=&quot;weather-icon&quot;&gt;&lt;/i&gt;&lt;/div&gt;
+            &lt;div class=&quot;weather-details&quot;&gt;
+                &lt;div class=&quot;temperature&quot; id=&quot;temperature&quot;&gt;--°C&lt;/div&gt;
+                &lt;div class=&quot;condition&quot; id=&quot;condition&quot;&gt;加载中...&lt;/div&gt;
+                &lt;div class=&quot;wind-humidity&quot;&gt;
+                    &lt;span id=&quot;wind&quot;&gt;风向: --&lt;/span&gt; | &lt;span id=&quot;humidity&quot;&gt;湿度: --%&lt;/span&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;script&gt;
+        document.getElementById(&#x27;get-weather&#x27;).addEventListener(&#x27;click&#x27;, fetchWeather);
+        window.addEventListener(&#x27;DOMContentLoaded&#x27;, fetchWeather);
+        
+        async function fetchWeather() {
+            const city = document.getElementById(&#x27;city-input&#x27;).value;
+            const container = document.getElementById(&#x27;weather-container&#x27;);
+            const originalHTML = container.innerHTML;
+            
+            container.innerHTML = &#x27;&lt;div style=&quot;text-align:center;padding:10px&quot;&gt;加载中...&lt;/div&gt;&#x27;;
+            
+            try {
+                const response = await fetch(`http://127.0.0.1:5000/weather?city=${encodeURIComponent(city)}`);
+                const text = await response.text();
+                const data = JSON.parse(text);
+                
+                if (data.error) {
+                    container.innerHTML = `&lt;div style=&quot;color:red;text-align:center&quot;&gt;${data.error}&lt;/div&gt;`;
+                    return;
+                }
+                
+                if (!data.temperature || !data.condition || !data.windDir || !data.windScale || !data.humidity || !data.icon) {
+                    container.innerHTML = &#x27;&lt;div style=&quot;color:red;text-align:center&quot;&gt;数据不完整: 缺少必要字段&lt;/div&gt;&#x27;;
+                    return;
+                }
+                
+                container.innerHTML = originalHTML;
+                document.getElementById(&#x27;weather-icon&#x27;).className = `qi-${data.icon}`;
+                document.getElementById(&#x27;temperature&#x27;).textContent = `${data.temperature}°C`;
+                document.getElementById(&#x27;condition&#x27;).textContent = data.condition;
+                document.getElementById(&#x27;wind&#x27;).textContent = `风向: ${data.windDir} ${data.windScale}级`;
+                document.getElementById(&#x27;humidity&#x27;).textContent = `湿度: ${data.humidity}%`;
+                
+            } catch (error) {
+                console.error(&#x27;请求错误:&#x27;, error);
+                container.innerHTML = `&lt;div style=&quot;color:red;text-align:center&quot;&gt;${error.name === &#x27;SyntaxError&#x27; ? &#x27;数据格式错误&#x27; : &#x27;网络请求失败&#x27;}: ${error.message}&lt;/div&gt;`;
+            }
+        }
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+]]></content><link href="https://github.com/SylverQG/Blogs/issues/9"/><category term="Python"/><category term="Web"/><published>2025-08-04T16:41:43+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/8</id><title>Update Note</title><updated>2025-08-04T16:42:19.033816+00:00</updated><content type="html"><![CDATA[<p>我更新了一下Action里面需要的版本，似乎又make了，因为我重新看了一下仓库issues的更新的提示<a href="https://github.com/yihong0618/gitblog/issues/177">https://github.com/yihong0618/gitblog/issues/177</a>需要把Backup文件夹<a href="https://github.com/SylverQG/Blogs/commit/46b48b5f693df83812deef9d5abbd857ce963b25">删除</a>。</p>
 <p>再次复制一下整个的<a href="https://github.com/SylverQG/Blogs/blob/main/.github/workflows/generate_readme.yml"><code>yml</code></a></p>
 <pre><code class="language-yml">name: Generate README
 
@@ -53,7 +377,7 @@ jobs:
           git commit -a -m &#x27;update new blog&#x27; || echo &quot;nothing to commit&quot;
           git push || echo &quot;nothing to push&quot;
 </code></pre>
-]]></content><link href="https://github.com/SylverQG/Blogs/issues/8"/><category term="filed"/><published>2025-08-02T10:37:49+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/7</id><title>加速世界</title><updated>2025-08-02T12:52:39.171289+00:00</updated><content type="html"><![CDATA[<h1>GitHub 加速镜像</h1>
+]]></content><link href="https://github.com/SylverQG/Blogs/issues/8"/><category term="filed"/><published>2025-08-02T10:37:49+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/7</id><title>加速世界</title><updated>2025-08-04T16:42:19.396945+00:00</updated><content type="html"><![CDATA[<h1>GitHub 加速镜像</h1>
 <h2>kgithub</h2>
 <p>一个公益加速项目，仅需在 github.com 前加上’k‘即可，若提示访问限制请刷新。</p>
 <p>任意 github 的项目，均可在网址前面加上 k 变为 kgithub.com 就正常了，如无法使用大概率使用的是国外 IP 访问呢，该服务必须使用国内 ip 访问。</p>
@@ -65,7 +389,7 @@ jobs:
 <p>如：github.com/X/UserScript 将链接更换后
 <a href="https://github.com/X/UserScript">https://github.com/X/UserScript</a>
 <a href="https://github.hscsec.cn/X/UserScript">https://github.hscsec.cn/X/UserScript</a></p>
-]]></content><link href="https://github.com/SylverQG/Blogs/issues/7"/><category term="ping"/><category term="GreatWall"/><published>2023-10-27T08:55:00+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/6</id><title>math</title><updated>2025-08-02T12:52:39.532565+00:00</updated><content type="html"><![CDATA[<p>考研数学一的高等数学部分的知识速记如下：
+]]></content><link href="https://github.com/SylverQG/Blogs/issues/7"/><category term="ping"/><category term="GreatWall"/><published>2023-10-27T08:55:00+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/6</id><title>math</title><updated>2025-08-04T16:42:19.761194+00:00</updated><content type="html"><![CDATA[<p>考研数学一的高等数学部分的知识速记如下：
 函数极限连续：
 极限是高等数学的灵魂，函数连续很重要；
 极限存在准则，洛必达法则很好用；
@@ -129,7 +453,7 @@ jobs:
 点估计优缺点，区间估计优缺点；
 最大似然优缺点，考试只考矩估计。
 以上是考研数学一概率论部分的速记口诀，希望对您有所帮助。</p>
-]]></content><link href="https://github.com/SylverQG/Blogs/issues/6"/><category term="math"/><published>2023-10-19T14:31:49+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/5</id><title>ComputerNet</title><updated>2025-08-02T12:52:39.905692+00:00</updated><content type="html"><![CDATA[<h1>一、概述</h1>
+]]></content><link href="https://github.com/SylverQG/Blogs/issues/6"/><category term="math"/><published>2023-10-19T14:31:49+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/5</id><title>ComputerNet</title><updated>2025-08-04T16:42:20.146509+00:00</updated><content type="html"><![CDATA[<h1>一、概述</h1>
 <ol>
 <li>
 计算机性能<ol>
@@ -272,7 +596,7 @@ $S\cdot B= (+1-1-3-1-1-3+1-1) / 8=-1, B 发送0$
 $S\cdot C= (+1+1+3+1-1-3-1-1) / 8=0,  C 无发送$
 $S\cdot D= (+1+1+3-1+1+3+1-1) / 8=1,  D 发送1$</li>
 </ol>
-]]></content><link href="https://github.com/SylverQG/Blogs/issues/5"/><category term="ComputerNet"/><published>2023-10-06T14:56:13+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/4</id><title>DataStructure</title><updated>2025-08-02T12:52:40.260477+00:00</updated><content type="html"><![CDATA[<h1>一、绪论|顺序表</h1>
+]]></content><link href="https://github.com/SylverQG/Blogs/issues/5"/><category term="ComputerNet"/><published>2023-10-06T14:56:13+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/4</id><title>DataStructure</title><updated>2025-08-04T16:42:20.501222+00:00</updated><content type="html"><![CDATA[<h1>一、绪论|顺序表</h1>
 <ol>
 <li>数据元素、数据项以及数据结构三者之间的关系</li>
 <li>逻辑结构、存储结构（物理结构）的区分</li>
@@ -534,7 +858,7 @@ $S\cdot D= (+1+1+3-1+1+3+1-1) / 8=1,  D 发送1$</li>
 </ol>
 </li>
 </ol>
-]]></content><link href="https://github.com/SylverQG/Blogs/issues/4"/><category term="DataStructure"/><published>2023-10-05T14:52:23+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/3</id><title>Crypto</title><updated>2025-08-02T12:52:40.616082+00:00</updated><content type="html"><![CDATA[<p>现代密码学目录(仅目录)</p>
+]]></content><link href="https://github.com/SylverQG/Blogs/issues/4"/><category term="DataStructure"/><published>2023-10-05T14:52:23+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/3</id><title>Crypto</title><updated>2025-08-04T16:42:20.901825+00:00</updated><content type="html"><![CDATA[<p>现代密码学目录(仅目录)</p>
 <h1>1. 基础</h1>
 <h2>1.1 威胁</h2>
 <h2>1.2 信息安全模型</h2>
@@ -599,7 +923,7 @@ $S\cdot D= (+1+1+3-1+1+3+1-1) / 8=1,  D 发送1$</li>
 <h2>10.2 Kerberos认证系统</h2>
 <h2>10.3 X.509认证业务</h2>
 <h2>10.4 PGP</h2>
-]]></content><link href="https://github.com/SylverQG/Blogs/issues/3"/><category term="Crypto"/><published>2023-09-21T14:01:39+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/2</id><title>how issues go to the md?</title><updated>2025-08-02T12:52:40.975806+00:00</updated><content type="html"><![CDATA[<ol>
+]]></content><link href="https://github.com/SylverQG/Blogs/issues/3"/><category term="Crypto"/><published>2023-09-21T14:01:39+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/2</id><title>how issues go to the md?</title><updated>2025-08-04T16:42:21.254211+00:00</updated><content type="html"><![CDATA[<ol>
 <li>
 <p>本仓库搭建概况</p>
 <ul>
@@ -716,7 +1040,7 @@ Stderr:       | fatal: detected dubious ownership in repository at &#x27;/github
 fatal: unable to access &#x27;https://github.com/SylverQG/Blogs/&#x27;: The requested URL returned error: 403
 nothing to push
 </code></pre>
-]]></content><link href="https://github.com/SylverQG/Blogs/issues/2"/><category term="ping"/><category term="filed"/><published>2023-06-15T12:56:55+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/1</id><title>A New Try as Restart</title><updated>2025-08-02T12:52:41.344887+00:00</updated><content type="html"><![CDATA[<h1>A New Try</h1>
+]]></content><link href="https://github.com/SylverQG/Blogs/issues/2"/><category term="ping"/><category term="filed"/><published>2023-06-15T12:56:55+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/1</id><title>A New Try as Restart</title><updated>2025-08-04T16:42:21.598253+00:00</updated><content type="html"><![CDATA[<h1>A New Try</h1>
 <p>To make blogs by the issues</p>
 <p>To say goodbye to the old world</p>
 <p>To put the ping in the e-world</p>
