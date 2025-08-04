@@ -143,9 +143,11 @@ if weather:
 5. 遇到错误时，检查API_HOST、PROJECT_ID和KEY_ID是否正确
 6. 使用`requests`库时，添加异常处理确保程序稳定性
 
+## 七、图
 
+<img width="373" height="198" alt="Image" src="https://github.com/user-attachments/assets/f047b8ae-7e31-4b16-93b0-2a8ed05cc2a0" />
 
-## 七、代码
+## 八、代码
 ### `weather_widget.py`
 ```python
 import jwt
