@@ -324,3 +324,95 @@ if __name__ == '__main__':
 </body>
 </html>
 ```
+
+
+---
+
+# Django Channels 基础配置
+
+1. 安装
+```bash
+pip install channels
+```
+
+2. 配置
+
+- 注册`Channels`：`settings.py`
+
+```python
+# settings.py
+
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'channels',
+    'wsapp', # 添加 your app
+]
+```
+- 在`settings.py`中添加 `asgi_application`
+
+```python
+ASGI_APPLICATION = 'mysite.asgi.application'
+```
+
+- 修改`asgi.py`
+
+```python
+import os
+
+from django.core.asgi import get_asgi_application
+from channels.routing import ProtocolTypeRouter, URLRouter
+
+from . import routing
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'mysite.settings')
+# application = get_asgi_application()
+
+application = ProtocolTypeRouter({
+    "http": get_asgi_application(),
+    "websocket": URLRouter([
+        routing.websocket_urlpatterns,
+    ]),
+})
+```
+
+- 在`settigs.py` 同级目录下创建`routing.py`
+
+```python
+
+from django.urls import re_path
+
+from wsapp import consumers
+
+websocket_urlpatterns = [
+    re_path(r'ws/(?P<group>\w+)/$', consumers.ChatConsumer.as_asgi()),
+]
+```
+
+- 在`wsapp`目录下创建`consumers.py`，编写处理websocket的逻辑
+
+```python
+from channels.generic.websocket import WebsocketConsumer   
+from channels.exceptions import StopConsumer
+
+class ChatConsumer(WebsocketConsumer):
+    def websocket_connect(self, message):
+        # 有客户端向服务端发送websocket请求时，会调用此方法
+        # 客户端允许和服务端建立websocket连接
+        self.accept()
+
+    def websocket_receive(self, message):
+        # 浏览器基于websocket协议，向服务端发送数据时，会调用此方法
+        print(message) 
+        self.send("不要回复")
+        # self.close() 服务端可以主动断掉某个客户端的连接
+
+    def websocket_disconnect(self, message):
+        # 客户端断开连接时，会调用此方法
+        print("断开连接")
+        raise StopConsumer()
+```
