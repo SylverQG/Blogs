@@ -360,6 +360,7 @@ ASGI_APPLICATION = 'mysite.asgi.application'
 ```
 
 - 修改`asgi.py`
+> 在项目的settings.py同级目录下的asgi.py文件中加入下面的内容：Django2.2是默认没有asgi.py文件，手动创建一个即可。Django3之后，项目默认会生成一个asgi.py文件。
 
 ```python
 import os
