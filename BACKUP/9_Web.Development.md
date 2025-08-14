@@ -437,14 +437,79 @@ class ChatConsumer(WebsocketConsumer):
 <hr>
 <h3>⚙️ ​<strong>​2. 适用框架与典型场景​</strong>​</h3>
 <div class="hyc-common-markdown__table-wrapper" data-has-scroll="false" style="font-size: 14px; color: rgb(0, 0, 0); background-color: rgba(0, 0, 0, 0); border-collapse: separate; border-spacing: 0px; padding: 0px;">
-​​服务器​​ | ​​兼容框架​​ | ​​最佳场景​​
--- | -- | --
-​​Gunicorn​​ | Django, Flask, Pyramid | 传统同步应用（CMS、电商后台）
-​​Uvicorn​​ | FastAPI, Starlette, Sanic | 异步 API 服务、低延迟实时交互
-​​Daphne​​ | Django Channels, Quart | WebSocket 实时应用（聊天、推送系统）
-
+  <table class="hyc-table">
+      <thead>
+          <tr>
+              <th>服务器</th>
+              <th>兼容框架</th>
+              <th>最佳场景</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr class="gunicorn-row">
+              <td>Gunicorn</td>
+              <td>Django, Flask, Pyramid</td>
+              <td>传统同步应用（CMS、电商后台）</td>
+          </tr>
+          <tr class="uvicorn-row">
+              <td>Uvicorn</td>
+              <td>FastAPI, Starlette, Sanic</td>
+              <td>异步 API 服务、低延迟实时交互</td>
+          </tr>
+          <tr class="daphne-row">
+              <td>Daphne</td>
+              <td>Django Channels, Quart</td>
+              <td>WebSocket 实时应用（聊天、推送系统）</td>
+          </tr>
+      </tbody>
+  </table>
 </div>
-<blockquote>
+
+<div class="hyc-common-markdown__table-wrapper" data-has-scroll="false" style="font-size: 14px; color: rgb(0, 0, 0); background-color: rgba(0, 0, 0, 0); border-collapse: separate; border-spacing: 0px; padding: 0px;">
+<h3>📊<strong>3. 性能关键指标对比</strong></h3>
+  <table class="hyc-table">
+      <thead>
+          <tr>
+              <th>特性</th>
+              <th>Gunicorn</th>
+              <th>Uvicorn</th>
+              <th>Daphne</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr>
+              <td>并发模型</td>
+              <td>多进程</td>
+              <td>单进程异步协程</td>
+              <td>单进程异步事件循环</td>
+          </tr>
+          <tr>
+              <td>WebSocket 支持</td>
+              <td>❌（需插件）</td>
+              <td>✅ 原生</td>
+              <td>✅ 原生</td>
+          </tr>
+          <tr>
+              <td>HTTP/2 支持</td>
+              <td>❌</td>
+              <td>✅</td>
+              <td>✅</td>
+          </tr>
+          <tr>
+              <td>请求吞吐量</td>
+              <td class="comparison-medium">中（依赖进程数）</td>
+              <td class="comparison-high">高（≈10k+/秒）</td>
+              <td class="comparison-high">高（≈7k+/秒）</td>
+          </tr>
+          <tr>
+              <td>内存占用</td>
+              <td class="comparison-low">高（多进程复制）</td>
+              <td class="comparison-high">低</td>
+              <td class="comparison-medium">中</td>
+          </tr>
+      </tbody>
+  </table>
+</div>
 <p>💡 ​<strong>​性能测试参考​</strong>​：在 1000 并发连接下，Uvicorn 处理能力可达 Gunicorn 的 3 倍以上。</p>
 </blockquote>
 <hr>
