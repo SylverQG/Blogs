@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<feed xmlns="http://www.w3.org/2005/Atom"><id>https://github.com/SylverQG/Blogs</id><title>RSS feed of SylverQG's Blogs</title><updated>2025-08-13T16:45:53.321843+00:00</updated><author><name>SylverQG</name><email>doublc_qluv@163.com</email></author><link href="https://github.com/SylverQG/Blogs"/><link href="https://raw.githubusercontent.com/SylverQG/Blogs/master/feed.xml" rel="self"/><generator uri="https://lkiesow.github.io/python-feedgen" version="1.0.0">python-feedgen</generator><entry><id>https://github.com/SylverQG/Blogs/issues/9</id><title>Web Development</title><updated>2025-08-13T16:45:54.261467+00:00</updated><content type="html"><![CDATA[<h1>和风天气API使用指南</h1>
+<feed xmlns="http://www.w3.org/2005/Atom"><id>https://github.com/SylverQG/Blogs</id><title>RSS feed of SylverQG's Blogs</title><updated>2025-08-14T17:03:36.746123+00:00</updated><author><name>SylverQG</name><email>doublc_qluv@163.com</email></author><link href="https://github.com/SylverQG/Blogs"/><link href="https://raw.githubusercontent.com/SylverQG/Blogs/master/feed.xml" rel="self"/><generator uri="https://lkiesow.github.io/python-feedgen" version="1.0.0">python-feedgen</generator><entry><id>https://github.com/SylverQG/Blogs/issues/9</id><title>Web Development</title><updated>2025-08-14T17:03:37.590305+00:00</updated><content type="html"><![CDATA[<h1>和风天气API使用指南</h1>
 <p><a href="https://dev.qweather.com/">和风天气API</a></p>
 <p><code>由腾讯元宝辅助生成</code></p>
 <p>基于代码分析，和风天气API目前主要使用JWT认证方式，以下是详细使用说明：</p>
@@ -325,7 +325,7 @@ if __name__ == &#x27;__main__&#x27;:
 &lt;/body&gt;
 &lt;/html&gt;
 </code></pre>
-]]></content><link href="https://github.com/SylverQG/Blogs/issues/9"/><category term="Python"/><category term="Web"/><published>2025-08-04T16:41:43+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/8</id><title>Update Note</title><updated>2025-08-13T16:45:54.642602+00:00</updated><content type="html"><![CDATA[<p>我更新了一下Action里面需要的版本，似乎又make了，因为我重新看了一下仓库issues的更新的提示<a href="https://github.com/yihong0618/gitblog/issues/177">https://github.com/yihong0618/gitblog/issues/177</a>需要把Backup文件夹<a href="https://github.com/SylverQG/Blogs/commit/46b48b5f693df83812deef9d5abbd857ce963b25">删除</a>。</p>
+]]></content><link href="https://github.com/SylverQG/Blogs/issues/9"/><category term="Python"/><category term="Web"/><published>2025-08-04T16:41:43+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/8</id><title>Update Note</title><updated>2025-08-14T17:03:37.979917+00:00</updated><content type="html"><![CDATA[<p>我更新了一下Action里面需要的版本，似乎又make了，因为我重新看了一下仓库issues的更新的提示<a href="https://github.com/yihong0618/gitblog/issues/177">https://github.com/yihong0618/gitblog/issues/177</a>需要把Backup文件夹<a href="https://github.com/SylverQG/Blogs/commit/46b48b5f693df83812deef9d5abbd857ce963b25">删除</a>。</p>
 <p>再次复制一下整个的<a href="https://github.com/SylverQG/Blogs/blob/main/.github/workflows/generate_readme.yml"><code>yml</code></a></p>
 <pre><code class="language-yml">name: Generate README
 
@@ -379,7 +379,7 @@ jobs:
           git commit -a -m &#x27;update new blog&#x27; || echo &quot;nothing to commit&quot;
           git push || echo &quot;nothing to push&quot;
 </code></pre>
-]]></content><link href="https://github.com/SylverQG/Blogs/issues/8"/><category term="filed"/><published>2025-08-02T10:37:49+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/7</id><title>加速世界</title><updated>2025-08-13T16:45:55.048788+00:00</updated><content type="html"><![CDATA[<h1>GitHub 加速镜像</h1>
+]]></content><link href="https://github.com/SylverQG/Blogs/issues/8"/><category term="filed"/><published>2025-08-02T10:37:49+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/7</id><title>加速世界</title><updated>2025-08-14T17:03:38.383189+00:00</updated><content type="html"><![CDATA[<h1>GitHub 加速镜像</h1>
 <h2>kgithub</h2>
 <p>一个公益加速项目，仅需在 github.com 前加上’k‘即可，若提示访问限制请刷新。</p>
 <p>任意 github 的项目，均可在网址前面加上 k 变为 kgithub.com 就正常了，如无法使用大概率使用的是国外 IP 访问呢，该服务必须使用国内 ip 访问。</p>
@@ -391,7 +391,7 @@ jobs:
 <p>如：github.com/X/UserScript 将链接更换后
 <a href="https://github.com/X/UserScript">https://github.com/X/UserScript</a>
 <a href="https://github.hscsec.cn/X/UserScript">https://github.hscsec.cn/X/UserScript</a></p>
-]]></content><link href="https://github.com/SylverQG/Blogs/issues/7"/><category term="ping"/><category term="GreatWall"/><published>2023-10-27T08:55:00+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/6</id><title>math</title><updated>2025-08-13T16:45:55.433556+00:00</updated><content type="html"><![CDATA[<p>考研数学一的高等数学部分的知识速记如下：
+]]></content><link href="https://github.com/SylverQG/Blogs/issues/7"/><category term="ping"/><category term="GreatWall"/><published>2023-10-27T08:55:00+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/6</id><title>math</title><updated>2025-08-14T17:03:38.755691+00:00</updated><content type="html"><![CDATA[<p>考研数学一的高等数学部分的知识速记如下：
 函数极限连续：
 极限是高等数学的灵魂，函数连续很重要；
 极限存在准则，洛必达法则很好用；
@@ -455,7 +455,7 @@ jobs:
 点估计优缺点，区间估计优缺点；
 最大似然优缺点，考试只考矩估计。
 以上是考研数学一概率论部分的速记口诀，希望对您有所帮助。</p>
-]]></content><link href="https://github.com/SylverQG/Blogs/issues/6"/><category term="math"/><published>2023-10-19T14:31:49+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/5</id><title>ComputerNet</title><updated>2025-08-13T16:45:55.800153+00:00</updated><content type="html"><![CDATA[<h1>一、概述</h1>
+]]></content><link href="https://github.com/SylverQG/Blogs/issues/6"/><category term="math"/><published>2023-10-19T14:31:49+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/5</id><title>ComputerNet</title><updated>2025-08-14T17:03:39.183328+00:00</updated><content type="html"><![CDATA[<h1>一、概述</h1>
 <ol>
 <li>
 计算机性能<ol>
@@ -598,7 +598,7 @@ $S\cdot B= (+1-1-3-1-1-3+1-1) / 8=-1, B 发送0$
 $S\cdot C= (+1+1+3+1-1-3-1-1) / 8=0,  C 无发送$
 $S\cdot D= (+1+1+3-1+1+3+1-1) / 8=1,  D 发送1$</li>
 </ol>
-]]></content><link href="https://github.com/SylverQG/Blogs/issues/5"/><category term="ComputerNet"/><published>2023-10-06T14:56:13+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/4</id><title>DataStructure</title><updated>2025-08-13T16:45:56.164123+00:00</updated><content type="html"><![CDATA[<h1>一、绪论|顺序表</h1>
+]]></content><link href="https://github.com/SylverQG/Blogs/issues/5"/><category term="ComputerNet"/><published>2023-10-06T14:56:13+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/4</id><title>DataStructure</title><updated>2025-08-14T17:03:39.560501+00:00</updated><content type="html"><![CDATA[<h1>一、绪论|顺序表</h1>
 <ol>
 <li>数据元素、数据项以及数据结构三者之间的关系</li>
 <li>逻辑结构、存储结构（物理结构）的区分</li>
@@ -860,7 +860,7 @@ $S\cdot D= (+1+1+3-1+1+3+1-1) / 8=1,  D 发送1$</li>
 </ol>
 </li>
 </ol>
-]]></content><link href="https://github.com/SylverQG/Blogs/issues/4"/><category term="DataStructure"/><published>2023-10-05T14:52:23+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/3</id><title>Crypto</title><updated>2025-08-13T16:45:56.534333+00:00</updated><content type="html"><![CDATA[<p>现代密码学目录(仅目录)</p>
+]]></content><link href="https://github.com/SylverQG/Blogs/issues/4"/><category term="DataStructure"/><published>2023-10-05T14:52:23+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/3</id><title>Crypto</title><updated>2025-08-14T17:03:39.925760+00:00</updated><content type="html"><![CDATA[<p>现代密码学目录(仅目录)</p>
 <h1>1. 基础</h1>
 <h2>1.1 威胁</h2>
 <h2>1.2 信息安全模型</h2>
@@ -925,7 +925,7 @@ $S\cdot D= (+1+1+3-1+1+3+1-1) / 8=1,  D 发送1$</li>
 <h2>10.2 Kerberos认证系统</h2>
 <h2>10.3 X.509认证业务</h2>
 <h2>10.4 PGP</h2>
-]]></content><link href="https://github.com/SylverQG/Blogs/issues/3"/><category term="Crypto"/><published>2023-09-21T14:01:39+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/2</id><title>how issues go to the md?</title><updated>2025-08-13T16:45:56.908829+00:00</updated><content type="html"><![CDATA[<ol>
+]]></content><link href="https://github.com/SylverQG/Blogs/issues/3"/><category term="Crypto"/><published>2023-09-21T14:01:39+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/2</id><title>how issues go to the md?</title><updated>2025-08-14T17:03:40.338842+00:00</updated><content type="html"><![CDATA[<ol>
 <li>
 <p>本仓库搭建概况</p>
 <ul>
@@ -1042,7 +1042,7 @@ Stderr:       | fatal: detected dubious ownership in repository at &#x27;/github
 fatal: unable to access &#x27;https://github.com/SylverQG/Blogs/&#x27;: The requested URL returned error: 403
 nothing to push
 </code></pre>
-]]></content><link href="https://github.com/SylverQG/Blogs/issues/2"/><category term="ping"/><category term="filed"/><published>2023-06-15T12:56:55+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/1</id><title>A New Try as Restart</title><updated>2025-08-13T16:45:57.314392+00:00</updated><content type="html"><![CDATA[<h1>A New Try</h1>
+]]></content><link href="https://github.com/SylverQG/Blogs/issues/2"/><category term="ping"/><category term="filed"/><published>2023-06-15T12:56:55+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/1</id><title>A New Try as Restart</title><updated>2025-08-14T17:03:40.753829+00:00</updated><content type="html"><![CDATA[<h1>A New Try</h1>
 <p>To make blogs by the issues</p>
 <p>To say goodbye to the old world</p>
 <p>To put the ping in the e-world</p>

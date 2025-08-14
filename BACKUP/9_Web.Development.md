@@ -417,3 +417,79 @@ class ChatConsumer(WebsocketConsumer):
         print("断开连接")
         raise StopConsumer()
 ```
+
+---
+
+<html><head></head><body>
+<h1>Python Web 服务器（Gunicorn、Uvicorn、Daphne）对比解析</h1>
+<p>腾讯元宝生成</p>
+<p>以下是针对 Gunicorn、Uvicorn 和 Daphne 三类 Python Web 服务器的深度对比解析，综合其核心特性、适用场景及性能表现：</p>
+<hr>
+<h3>🔧 ​<strong>​1. 协议与架构设计​</strong>​</h3>
+<ul class="ybc-ul-component">
+<li class="ybc-li-component ybc-li-component_ul"><span class="ybc-li-component_content">​<strong>​Gunicorn​</strong>​<br>
+基于 ​<strong>​WSGI 协议​</strong>​（同步模型），采用​<strong>​预分叉多进程架构​</strong>​（Pre-fork）。每个 Worker 进程独立处理请求，依赖进程数提升并发，适合 CPU 密集型任务。</span></li>
+<li class="ybc-li-component ybc-li-component_ul"><span class="ybc-li-component_content">​<strong>​Uvicorn​</strong>​<br>
+基于 ​<strong>​ASGI 协议​</strong>​（异步模型），核心依赖 ​<strong>​uvloop 事件循环​</strong>​（libuv 的 Python 封装）和 ​<strong>​httptools 解析库​</strong>​，单进程即可高效处理高并发 I/O 操作（如 WebSocket、HTTP长连接）。</span></li>
+<li class="ybc-li-component ybc-li-component_ul"><span class="ybc-li-component_content">​<strong>​Daphne​</strong>​<br>
+同样基于 ​<strong>​ASGI 协议​</strong>​，由 ​<strong>​Django Channels 团队开发​</strong>​，专注支持 HTTP/WebSocket/HTTP2 多协议，内置异步事件循环，适合实时通信场景。</span></li>
+</ul>
+<hr>
+<h3>⚙️ ​<strong>​2. 适用框架与典型场景​</strong>​</h3>
+<div class="hyc-common-markdown__table-wrapper" data-has-scroll="false" style="font-size: 14px; color: rgb(0, 0, 0); background-color: rgba(0, 0, 0, 0); border-collapse: separate; border-spacing: 0px; padding: 0px;">
+​​服务器​​ | ​​兼容框架​​ | ​​最佳场景​​
+-- | -- | --
+​​Gunicorn​​ | Django, Flask, Pyramid | 传统同步应用（CMS、电商后台）
+​​Uvicorn​​ | FastAPI, Starlette, Sanic | 异步 API 服务、低延迟实时交互
+​​Daphne​​ | Django Channels, Quart | WebSocket 实时应用（聊天、推送系统）
+
+</div>
+<blockquote>
+<p>💡 ​<strong>​性能测试参考​</strong>​：在 1000 并发连接下，Uvicorn 处理能力可达 Gunicorn 的 3 倍以上。</p>
+</blockquote>
+<hr>
+<h3>🛠️ ​<strong>​4. 部署实践建议​</strong>​</h3>
+<ul class="ybc-ul-component">
+<li class="ybc-li-component ybc-li-component_ul"><span class="ybc-li-component_content">​<strong>​Gunicorn​</strong>​
+<ul class="ybc-ul-component">
+<li class="ybc-li-component ybc-li-component_ul"><span class="ybc-li-component_content">生产环境需搭配 ​<strong>​Nginx​</strong>​ 反向代理（静态文件处理、负载均衡）。</span></li>
+<li class="ybc-li-component ybc-li-component_ul"><span class="ybc-li-component_content">启动命令示例：
+<pre class="ybc-pre-component ybc-pre-component_not-math"><code>gunicorn -w 4 -b 0.0.0.0:8000 app:app</code></pre>
+</span></li>
+</ul>
+</span></li>
+<li class="ybc-li-component ybc-li-component_ul"><span class="ybc-li-component_content">​<strong>​Uvicorn​</strong>​
+<ul class="ybc-ul-component">
+<li class="ybc-li-component ybc-li-component_ul"><span class="ybc-li-component_content">开发期用单进程 + <code>--reload</code> 调试。</span></li>
+<li class="ybc-li-component ybc-li-component_ul"><span class="ybc-li-component_content">生产环境推荐 ​<strong>​Gunicorn + Uvicorn Worker​</strong>​ 组合（兼顾进程管理与异步性能）：
+<pre class="ybc-pre-component ybc-pre-component_not-math"><code>gunicorn -w 4 -k uvicorn.workers.UvicornWorker app:app</code></pre>
+</span></li>
+</ul>
+</span></li>
+<li class="ybc-li-component ybc-li-component_ul"><span class="ybc-li-component_content">​<strong>​Daphne​</strong>​
+<ul class="ybc-ul-component">
+<li class="ybc-li-component ybc-li-component_ul"><span class="ybc-li-component_content">直接作为独立服务器运行，尤其适合 Django Channels 项目：
+<pre class="ybc-pre-component ybc-pre-component_not-math"><code>daphne -b 0.0.0.0 -p 8000 project.asgi:application</code></pre>
+</span></li>
+<li class="ybc-li-component ybc-li-component_ul"><span class="ybc-li-component_content">需通过 ​<strong>​Nginx 配置​</strong>​ WebSocket 代理（<code>Upgrade</code>头处理）。</span></li>
+</ul>
+</span></li>
+</ul>
+<hr>
+<h3>⚖️ ​<strong>​5. 选型决策树​</strong>​</h3>
+<ol class="ybc-ol-component ybc-ol-component_1">
+<li class="ybc-li-component ybc-li-component_ol"><span class="ybc-li-component_content">​<strong>​同步框架（Django/Flask） + 高稳定性需求​</strong>​ → ​<strong>​Gunicorn​</strong>​。</span></li>
+<li class="ybc-li-component ybc-li-component_ol"><span class="ybc-li-component_content">​<strong>​异步框架（FastAPI/Starlette） + 高并发/低延迟​</strong>​ → ​<strong>​Uvicorn 单机​</strong>​ 或 ​<strong>​Gunicorn+Uvicorn Worker​</strong>​。</span></li>
+<li class="ybc-li-component ybc-li-component_ol"><span class="ybc-li-component_content">​<strong>​实时双向通信（WebSocket/HTTP2） + Django 生态​</strong>​ → ​<strong>​Daphne​</strong>​。</span></li>
+<li class="ybc-li-component ybc-li-component_ol"><span class="ybc-li-component_content">​<strong>​资源受限场景（如小型 VPS）​</strong>​ → ​<strong>​Uvicorn​</strong>​（内存占用更低）。</span></li>
+</ol>
+<hr>
+<h3>💎 ​<strong>​总结​</strong>​</h3>
+<ul class="ybc-ul-component">
+<li class="ybc-li-component ybc-li-component_ul"><span class="ybc-li-component_content">​<strong>​Gunicorn​</strong>​：​<strong>​稳​</strong>​，为传统同步应用提供工业级可靠性。</span></li>
+<li class="ybc-li-component ybc-li-component_ul"><span class="ybc-li-component_content">​<strong>​Uvicorn​</strong>​：​<strong>​快​</strong>​，异步高性能的首选，开发体验优。</span></li>
+<li class="ybc-li-component ybc-li-component_ul"><span class="ybc-li-component_content">​<strong>​Daphne​</strong>​：​<strong>​专​</strong>​，解决 Django 生态实时通信的痛点。</span></li>
+</ul>
+<blockquote>
+<p>⚠️ 注：三者均可与 ​<strong>​Nginx​</strong>​ 反向代理协作提升安全性，生产环境务必禁用调试模式（如 Uvicorn 的 <code>--reload</code>）。</p>
+</blockquote></body></html>
