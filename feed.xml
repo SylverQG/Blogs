@@ -1,5 +1,299 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<feed xmlns="http://www.w3.org/2005/Atom"><id>https://github.com/SylverQG/Blogs</id><title>RSS feed of SylverQG's Blogs</title><updated>2025-08-14T17:22:50.217984+00:00</updated><author><name>SylverQG</name><email>doublc_qluv@163.com</email></author><link href="https://github.com/SylverQG/Blogs"/><link href="https://raw.githubusercontent.com/SylverQG/Blogs/master/feed.xml" rel="self"/><generator uri="https://lkiesow.github.io/python-feedgen" version="1.0.0">python-feedgen</generator><entry><id>https://github.com/SylverQG/Blogs/issues/9</id><title>Web Development</title><updated>2025-08-14T17:22:51.344321+00:00</updated><content type="html"><![CDATA[<h1>和风天气API使用指南</h1>
+<feed xmlns="http://www.w3.org/2005/Atom"><id>https://github.com/SylverQG/Blogs</id><title>RSS feed of SylverQG's Blogs</title><updated>2025-10-21T12:33:09.796182+00:00</updated><author><name>SylverQG</name><email>doublc_qluv@163.com</email></author><link href="https://github.com/SylverQG/Blogs"/><link href="https://raw.githubusercontent.com/SylverQG/Blogs/master/feed.xml" rel="self"/><generator uri="https://lkiesow.github.io/python-feedgen" version="1.0.0">python-feedgen</generator><entry><id>https://github.com/SylverQG/Blogs/issues/10</id><title>LLM</title><updated>2025-10-21T12:33:10.846420+00:00</updated><content type="html"><![CDATA[<h1>快速入门RAG</h1>
+<p>来源：王海文</p>
+<h2>0.安装依赖库</h2>
+<pre><code class="language-python">%pip install -U langchain_community tiktoken langchain_openai chromadb langchain langchain_core
+%pip install sentence_transformers
+%pip install huggingface_hub
+%pip install ipywidgets
+%pip install unstructured
+%pip install sentencepiece bs4
+</code></pre>
+<h2>1.加载文档</h2>
+<pre><code class="language-python">from langchain_community.document_loaders import WebBaseLoader
+
+url = &quot;https://techdiylife.github.io/blog/202401/240327-ollama-20question.html&quot;
+loader = WebBaseLoader(
+    web_paths=[url],
+    requests_kwargs={
+        &quot;headers&quot;: {
+            &quot;User-Agent&quot;: &quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3&quot;
+        }
+    }
+)
+docs = loader.load()
+</code></pre>
+<h2>2.文本切分</h2>
+<pre><code class="language-python">from langchain_text_splitters import RecursiveCharacterTextSplitter
+text_splitter = RecursiveCharacterTextSplitter(chunk_size=300, chunk_overlap=50)
+split_text = text_splitter.split_documents(docs)
+</code></pre>
+<h2>3.向量化(Embedding)并存储</h2>
+<pre><code class="language-python">%pip install langchain_ollama socksio httpcore[socks]
+</code></pre>
+<pre><code class="language-python">from langchain_community.embeddings import OllamaEmbeddings
+# from langchain_ollama import OllamaEmbeddings
+from langchain_chroma import Chroma
+
+# ollama下载embedding模型：https://ollama.ai/ 
+# ollama pull mofanke/acge_text_embedding
+# ollama pull qwen3-embedding:4b
+
+embedding_model = OllamaEmbeddings(model=&quot;qwen3-embedding:4b&quot;)  # 参数名应为 model 而不是 model_name
+vectorstore = Chroma.from_documents(documents=split_text, embedding=embedding_model)
+retriever = vectorstore.as_retriever()
+print(&quot;向量数据库构建完成&quot;)
+</code></pre>
+<pre><code>向量数据库构建完成
+</code></pre>
+<pre><code class="language-bash">/tmp/ipykernel_1796418/1638132037.py:8: LangChainDeprecationWarning: The class `OllamaEmbeddings` was deprecated in LangChain 0.3.1 and will be removed in 1.0.0. An updated version of the class exists in the `langchain-ollama package and should be used instead. To use it run `pip install -U `langchain-ollama` and import as `from `langchain_ollama import OllamaEmbeddings``.
+  embedding_model = OllamaEmbeddings(model=&quot;qwen3-embedding:4b&quot;)  # 参数名应为 model 而不是 model_name
+向量数据库构建完成
+</code></pre>
+<h2>4.构建prompt模板</h2>
+<pre><code class="language-python">from langchain_core.prompts import ChatPromptTemplate
+
+template = &quot;&quot;&quot;你是一个回答问题的助手。请使用以下检索到的信息来回答问题。如果没有相关的信息，请回答&quot;没有找到相关的信息。&quot;。请用最多三句话来保持回答的简洁性
+
+问题: {question}
+
+背景: {context}
+
+答案:
+&quot;&quot;&quot;
+prompt = ChatPromptTemplate.from_template(template) 
+
+
+# 也可以从hub中加载
+# from langchain import hub
+# prompt = hub.load(&quot;tongshi/prompt_template_ragopenai&quot;)
+</code></pre>
+<h2>5.初始化LLM</h2>
+<pre><code class="language-python"># 在线api
+# import os
+# from dotenv import load_dotenv
+# from langchain_openai import ChatOpenAI
+
+# load_dotenv() # loads contents of the .env file
+
+# llm = ChatOpenAI(
+#     openai_api_base=&quot;https://api.openai.com/v1&quot;,
+#     openai_api_version=&quot;2020-11-07&quot;,
+#     openai_api_key=os.getenv(&quot;OPENAI_API_KEY&quot;)
+#     model=&quot;gpt-3.5-turbo&quot;,
+# )
+# ==============================================
+
+# 本地ollama
+from langchain_community.llms import Ollama
+llm = Ollama(model=&quot;deepseek-r1:7b&quot;)
+# from langchain_ollama import OllamaLLM
+# llm = OllamaLLM(model=&quot;deepseek-r1:7b&quot;)
+</code></pre>
+<pre><code class="language-bash">
+/tmp/ipykernel_1796418/3311084766.py:18: LangChainDeprecationWarning: The class `Ollama` was deprecated in LangChain 0.3.1 and will be removed in 1.0.0. An updated version of the class exists in the `langchain-ollama package and should be used instead. To use it run `pip install -U `langchain-ollama` and import as `from `langchain_ollama import OllamaLLM``.
+  llm = Ollama(model=&quot;deepseek-r1:7b&quot;)
+</code></pre>
+<h2>6.构建 RAG Chain</h2>
+<pre><code class="language-python">from langchain_core.output_parsers import StrOutputParser
+from langchain_core.runnables import RunnablePassthrough
+
+def format_docs(docs):
+    return &quot;\n\n&quot;.join([f&quot;{d.page_content}\n\n&quot; for d in docs])
+
+rag_chain = (
+    {&quot;context&quot;:retriever | format_docs, &quot;question&quot;: RunnablePassthrough()}
+    | prompt
+    | llm
+    | StrOutputParser()
+)
+
+# RunnablePassthrough():将原始输入传送给下一个节点
+</code></pre>
+<h2>7.执行查询</h2>
+<pre><code class="language-python">result = rag_chain.invoke(&quot;ollama支持哪些模型?&quot;)
+print(result)
+</code></pre>
+<pre><code>ollama支持的模型包括70b、8b等版本，具体取决于下载和配置。instruct标签通常指代中文生成模型，text标签则指代中文推理模型，默认为text-3.5-turbo-instruct。官方支持的详细信息可参考https://ollama.com/library。
+</code></pre>
+<h2>8.批量测试</h2>
+<pre><code class="language-python">test_questions = [
+    &quot;ollama支持那些模型?&quot;,
+    &quot;Linux系统上,模型下载之后,模型存放在哪里?&quot;,
+    &quot;Windows系统上,如何修改默认下载位置?&quot;,
+    &quot;Modelfile是什么?&quot;,
+    &quot;如何导入safetensors格式的模型?&quot;,
+    &quot;有什么webui可用吗?&quot;,
+]
+
+for i,q in enumerate(test_questions[:3],start=1):
+    print(f&quot;问题 {i} : {q}&quot;)
+    print(f&quot;答案 {i} : {rag_chain.invoke(q)}\n&quot;)
+</code></pre>
+<pre><code>问题 1 : ollama支持那些模型?
+答案 1 : Ollama模型库中，70b和8b分别对应Qwen-7B和Qwen-8B模型；instruct是Instruct系列指令模型，text是专门的文本生成模型。
+
+问题 2 : Linux系统上,模型下载之后,模型存放在哪里?
+答案 2 : 在 Linux 系统上，默认情况下，下载好的模型会被存放在 `/home/&lt;username&gt;/.ollama/models` 的位置。
+
+问题 3 : Windows系统上,如何修改默认下载位置?
+答案 3 : 如何修改下载模型的默认存放目录？  
+在 Windows 系统中，可以进入 Documentary 或 Document folder 设置，默认存储位置为 C:\Users\&lt;username&gt;\.ollama\models。打开系统属性，选择“文档”或“更多文件夹”，找到 ollama_models 文件夹并修改其路径。
+</code></pre>
+<h1>关键技术点</h1>
+<h2>1.通过Ollama使用Embeddinng模型</h2>
+<pre><code class="language-python">%ollama pull mxbai-embed-large
+# 或
+%ollama pull mofanke/acge_text_embedding
+# 或
+%ollama pull qwen3-embedding:4b
+from langchain_community.embeddings import OllamaEmbeddings
+# from langchain_ollama import OllamaEmbeddings
+embedding_model = OllamaEmbeddings(model=&quot;qwen3-embedding:4b&quot;)
+</code></pre>
+<h2>2.如何通过Ollama使用LLM</h2>
+<pre><code class="language-python"># 本地ollama
+from langchain_community.llms import Ollama
+llm = Ollama(model=&quot;deepseek-r1:7b&quot;)
+# llm = Ollama(model=&quot;qwen3&quot;)
+</code></pre>
+<blockquote>
+<p>支持流式输出：</p>
+<pre><code>for chunk in llm.stream(&quot;讲个笑话&quot;):
+   print(chunk,end=&quot;&quot;,flush=True)
+</code></pre>
+</blockquote>
+<h2>3.将Prompt提示词改为中文</h2>
+<pre><code class="language-python">prompt = hub.pull(&quot;rlm/rag-prompt&quot;)
+prompt.message[0].prompt.template = &quot;&quot;&quot;你是一个回答问题的助手。请使用以下检索到的信息来回答问题。如果没有相关的信息，请回答&quot;没有找到相关的信息。&quot;。请用最多三句话来保持回答的简洁性
+
+问题: {question}
+
+背景: {context}
+
+答案: &quot;&quot;&quot;
+</code></pre>
+<p>或者直接用<code>ChatPromptTemplate.from_template()</code>自定义</p>
+<h2>4.RAG是如何进行检索的</h2>
+<ol>
+<li>向量化：使用Embedding模型将文本转换为向量（如 mxbai-embed-large）</li>
+<li>相似度计算：使用余弦相似度 (cosine similarity) 向量数据库中查找最接近的文档</li>
+<li>返回Top-K：返回最相关的K个文档的上下文</li>
+</ol>
+<p><code>retriever = vectorstore.as_retriever(search_kwargs={&quot;k&quot;:3}) # 返回前三个结果</code></p>
+<h2>5.RAG是如何生成答案的</h2>
+<ol>
+<li>将用户问题+检索到的上下文 -&gt; 拼接成Prompt</li>
+<li>输入给LLM进行推理</li>
+<li>LLM仅基于上下文作答，避免进行幻觉</li>
+</ol>
+<blockquote>
+<p>你是一个回答问题的助手。请使用以下检索到的信息来回答问题……</p>
+<p>问题: {question}</p>
+<p>背景: {context}</p>
+<p>答案: &quot;&quot;&quot;</p>
+</blockquote>
+<h2>6.Runnable 接口</h2>
+<p><code>Runnable</code> 是LangChain的抽象接口，它定义了如何运行一个任务，支持统一调用各种组件(LLM， Prompt, Chain, Agent, Parser等)</p>
+<h3>核心方法:</h3>
+<ul>
+<li><code>.invoke(inputs)</code>: 运行一个任务，返回结果</li>
+<li><code>.batch(inputs, batch_size=1)</code>: 批量运行任务，返回结果</li>
+<li><code>.stream(inputs)</code>: 运行一个任务，返回结果，支持流式输出</li>
+<li><code>.bind(**kwargs)</code>: 绑定参数，返回一个新的Runnable对象</li>
+<li><code>.ainvoke(inputs)</code>: 异步运行一个任务，返回结果</li>
+<li><code>.abatch(inputs, batch_size=1)</code>: 异步批量运行任务，返回结果</li>
+</ul>
+<h3>组合方式(LCEL)：</h3>
+<pre><code class="language-python">chain = prompt | llm | StrOutputParser()
+chain.invoke({&quot;topic&quot;: &quot;bears&quot;})
+</code></pre>
+<h2>7.修改为读取本地文档</h2>
+<pre><code class="language-python"># TXT文件
+from langchain.document_loaders import TextLoader
+loader = TextLoader(&#x27;data/guide.txt&#x27;)
+docs = loader.load()
+
+# HTML文件
+from langchain.document_loaders import WebBaseLoader
+loader = WebBaseLoader(&quot;example.html&quot;)
+docs = loader.load()
+
+# PDF文件（需要安装pypdf2）
+from langchain.document_loaders import PyPDFLoader
+loader = PyPDFLoader(&quot;example.pdf&quot;)
+docs = loader.load()
+
+</code></pre>
+<h2>8.如何使用HuggingFace的Embedding模型</h2>
+<pre><code class="language-python"># from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_chroma import Chroma
+
+model_name = &quot;sentence-transformers/all-MiniLM-L6-v2&quot;
+model_kwargs = {&quot;device&quot;: &quot;gpu&quot;}
+ecode_kwargs = {&quot;normalize_embeddings&quot;: False}
+hf_embeddings = HuggingFaceEmbeddings(
+    model_name=model_name, 
+    model_kwargs=model_kwargs, 
+    encode_kwargs=ecode_kwargs)
+vector_store = Chorma.from_documents(splits, embedding=hf_embeddings)
+</code></pre>
+<h2>9.使用HuggingFace的LLM</h2>
+<h3>方法一：使用<code>transformers</code>+<code>pipeline</code></h3>
+<pre><code class="language-python">from transformers import AutoModelForCausalLm, AutoTokenizer, pipeline
+from langchain.llms import HuggingFacePipeline
+
+model_id = &quot;THUDM/chatglm3-6b&quot;
+tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=True)
+model = AutoModelForCausalLm.from_pretrained(model_id, trust_remote_code=True, device_map=&quot;auto&quot;)
+pipe = pipeline(task=&quot;text-generation&quot;, model=model, tokenizer=tokenizer, new_max_length=512)
+llm = HuggingFacePipeline(pipeline=pipe)
+</code></pre>
+<h3>方法二：使用from_model_id</h3>
+<pre><code class="language-python">from langchain_huggingface import HuggingFacePipeLine
+
+llm = HuggingFacePipeLine.from_model_id(
+    model_id=&quot;google/gemma2-7b&quot;,
+    task=&quot;text-generation&quot;,
+    device_map=&quot;auto&quot;,
+    model_kwargs={&quot;temperature&quot;: 0.7, &quot;max_length&quot;: 512,&quot;trust_remote_code&quot;: True}
+)
+</code></pre>
+<h1>RAG优化</h1>
+<table>
+<thead>
+<tr>
+<th>方向</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>模型升级</td>
+<td>使用更大更强的模型</td>
+</tr>
+<tr>
+<td>Embedding优化</td>
+<td>使用更高效的Embedding模型</td>
+</tr>
+<tr>
+<td>文本切分</td>
+<td>调整chunk_size (256<del>512)、overlap (50</del>100)</td>
+</tr>
+<tr>
+<td>检索策略</td>
+<td>修改K 值 (1<del>5)、尝试similarity_threshold (0.7</del>0.9)；过滤低分结果</td>
+</tr>
+<tr>
+<td>Prompt工程</td>
+<td>明确指令、限制输出格式、添加示例（few-shot）</td>
+</tr>
+<tr>
+<td>引入Rerank</td>
+<td>使用bge-rerank对检索结果重排序</td>
+</tr>
+</tbody></table>]]></content><link href="https://github.com/SylverQG/Blogs/issues/10"/><category term="LLM"/><published>2025-10-21T12:32:11+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/9</id><title>Web Development</title><updated>2025-10-21T12:33:11.271844+00:00</updated><content type="html"><![CDATA[<h1>和风天气API使用指南</h1>
 <p><a href="https://dev.qweather.com/">和风天气API</a></p>
 <p><code>由腾讯元宝辅助生成</code></p>
 <p>基于代码分析，和风天气API目前主要使用JWT认证方式，以下是详细使用说明：</p>
@@ -325,7 +619,7 @@ if __name__ == &#x27;__main__&#x27;:
 &lt;/body&gt;
 &lt;/html&gt;
 </code></pre>
-]]></content><link href="https://github.com/SylverQG/Blogs/issues/9"/><category term="Python"/><category term="Web"/><published>2025-08-04T16:41:43+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/8</id><title>Update Note</title><updated>2025-08-14T17:22:51.823436+00:00</updated><content type="html"><![CDATA[<p>我更新了一下Action里面需要的版本，似乎又make了，因为我重新看了一下仓库issues的更新的提示<a href="https://github.com/yihong0618/gitblog/issues/177">https://github.com/yihong0618/gitblog/issues/177</a>需要把Backup文件夹<a href="https://github.com/SylverQG/Blogs/commit/46b48b5f693df83812deef9d5abbd857ce963b25">删除</a>。</p>
+]]></content><link href="https://github.com/SylverQG/Blogs/issues/9"/><category term="Python"/><category term="Web"/><published>2025-08-04T16:41:43+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/8</id><title>Update Note</title><updated>2025-10-21T12:33:11.778444+00:00</updated><content type="html"><![CDATA[<p>我更新了一下Action里面需要的版本，似乎又make了，因为我重新看了一下仓库issues的更新的提示<a href="https://github.com/yihong0618/gitblog/issues/177">https://github.com/yihong0618/gitblog/issues/177</a>需要把Backup文件夹<a href="https://github.com/SylverQG/Blogs/commit/46b48b5f693df83812deef9d5abbd857ce963b25">删除</a>。</p>
 <p>再次复制一下整个的<a href="https://github.com/SylverQG/Blogs/blob/main/.github/workflows/generate_readme.yml"><code>yml</code></a></p>
 <pre><code class="language-yml">name: Generate README
 
@@ -379,7 +673,7 @@ jobs:
           git commit -a -m &#x27;update new blog&#x27; || echo &quot;nothing to commit&quot;
           git push || echo &quot;nothing to push&quot;
 </code></pre>
-]]></content><link href="https://github.com/SylverQG/Blogs/issues/8"/><category term="filed"/><published>2025-08-02T10:37:49+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/7</id><title>加速世界</title><updated>2025-08-14T17:22:52.309782+00:00</updated><content type="html"><![CDATA[<h1>GitHub 加速镜像</h1>
+]]></content><link href="https://github.com/SylverQG/Blogs/issues/8"/><category term="filed"/><published>2025-08-02T10:37:49+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/7</id><title>加速世界</title><updated>2025-10-21T12:33:12.219319+00:00</updated><content type="html"><![CDATA[<h1>GitHub 加速镜像</h1>
 <h2>kgithub</h2>
 <p>一个公益加速项目，仅需在 github.com 前加上’k‘即可，若提示访问限制请刷新。</p>
 <p>任意 github 的项目，均可在网址前面加上 k 变为 kgithub.com 就正常了，如无法使用大概率使用的是国外 IP 访问呢，该服务必须使用国内 ip 访问。</p>
@@ -391,7 +685,7 @@ jobs:
 <p>如：github.com/X/UserScript 将链接更换后
 <a href="https://github.com/X/UserScript">https://github.com/X/UserScript</a>
 <a href="https://github.hscsec.cn/X/UserScript">https://github.hscsec.cn/X/UserScript</a></p>
-]]></content><link href="https://github.com/SylverQG/Blogs/issues/7"/><category term="ping"/><category term="GreatWall"/><published>2023-10-27T08:55:00+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/6</id><title>math</title><updated>2025-08-14T17:22:52.824440+00:00</updated><content type="html"><![CDATA[<p>考研数学一的高等数学部分的知识速记如下：
+]]></content><link href="https://github.com/SylverQG/Blogs/issues/7"/><category term="ping"/><category term="GreatWall"/><published>2023-10-27T08:55:00+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/6</id><title>math</title><updated>2025-10-21T12:33:12.663185+00:00</updated><content type="html"><![CDATA[<p>考研数学一的高等数学部分的知识速记如下：
 函数极限连续：
 极限是高等数学的灵魂，函数连续很重要；
 极限存在准则，洛必达法则很好用；
@@ -455,7 +749,7 @@ jobs:
 点估计优缺点，区间估计优缺点；
 最大似然优缺点，考试只考矩估计。
 以上是考研数学一概率论部分的速记口诀，希望对您有所帮助。</p>
-]]></content><link href="https://github.com/SylverQG/Blogs/issues/6"/><category term="math"/><published>2023-10-19T14:31:49+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/5</id><title>ComputerNet</title><updated>2025-08-14T17:22:53.329906+00:00</updated><content type="html"><![CDATA[<h1>一、概述</h1>
+]]></content><link href="https://github.com/SylverQG/Blogs/issues/6"/><category term="math"/><published>2023-10-19T14:31:49+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/5</id><title>ComputerNet</title><updated>2025-10-21T12:33:13.163724+00:00</updated><content type="html"><![CDATA[<h1>一、概述</h1>
 <ol>
 <li>
 计算机性能<ol>
@@ -598,7 +892,7 @@ $S\cdot B= (+1-1-3-1-1-3+1-1) / 8=-1, B 发送0$
 $S\cdot C= (+1+1+3+1-1-3-1-1) / 8=0,  C 无发送$
 $S\cdot D= (+1+1+3-1+1+3+1-1) / 8=1,  D 发送1$</li>
 </ol>
-]]></content><link href="https://github.com/SylverQG/Blogs/issues/5"/><category term="ComputerNet"/><published>2023-10-06T14:56:13+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/4</id><title>DataStructure</title><updated>2025-08-14T17:22:53.827280+00:00</updated><content type="html"><![CDATA[<h1>一、绪论|顺序表</h1>
+]]></content><link href="https://github.com/SylverQG/Blogs/issues/5"/><category term="ComputerNet"/><published>2023-10-06T14:56:13+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/4</id><title>DataStructure</title><updated>2025-10-21T12:33:13.635811+00:00</updated><content type="html"><![CDATA[<h1>一、绪论|顺序表</h1>
 <ol>
 <li>数据元素、数据项以及数据结构三者之间的关系</li>
 <li>逻辑结构、存储结构（物理结构）的区分</li>
@@ -860,7 +1154,7 @@ $S\cdot D= (+1+1+3-1+1+3+1-1) / 8=1,  D 发送1$</li>
 </ol>
 </li>
 </ol>
-]]></content><link href="https://github.com/SylverQG/Blogs/issues/4"/><category term="DataStructure"/><published>2023-10-05T14:52:23+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/3</id><title>Crypto</title><updated>2025-08-14T17:22:54.322138+00:00</updated><content type="html"><![CDATA[<p>现代密码学目录(仅目录)</p>
+]]></content><link href="https://github.com/SylverQG/Blogs/issues/4"/><category term="DataStructure"/><published>2023-10-05T14:52:23+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/3</id><title>Crypto</title><updated>2025-10-21T12:33:14.090662+00:00</updated><content type="html"><![CDATA[<p>现代密码学目录(仅目录)</p>
 <h1>1. 基础</h1>
 <h2>1.1 威胁</h2>
 <h2>1.2 信息安全模型</h2>
@@ -925,7 +1219,7 @@ $S\cdot D= (+1+1+3-1+1+3+1-1) / 8=1,  D 发送1$</li>
 <h2>10.2 Kerberos认证系统</h2>
 <h2>10.3 X.509认证业务</h2>
 <h2>10.4 PGP</h2>
-]]></content><link href="https://github.com/SylverQG/Blogs/issues/3"/><category term="Crypto"/><published>2023-09-21T14:01:39+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/2</id><title>how issues go to the md?</title><updated>2025-08-14T17:22:54.820248+00:00</updated><content type="html"><![CDATA[<ol>
+]]></content><link href="https://github.com/SylverQG/Blogs/issues/3"/><category term="Crypto"/><published>2023-09-21T14:01:39+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/2</id><title>how issues go to the md?</title><updated>2025-10-21T12:33:14.541500+00:00</updated><content type="html"><![CDATA[<ol>
 <li>
 <p>本仓库搭建概况</p>
 <ul>
@@ -1042,7 +1336,7 @@ Stderr:       | fatal: detected dubious ownership in repository at &#x27;/github
 fatal: unable to access &#x27;https://github.com/SylverQG/Blogs/&#x27;: The requested URL returned error: 403
 nothing to push
 </code></pre>
-]]></content><link href="https://github.com/SylverQG/Blogs/issues/2"/><category term="ping"/><category term="filed"/><published>2023-06-15T12:56:55+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/1</id><title>A New Try as Restart</title><updated>2025-08-14T17:22:55.314618+00:00</updated><content type="html"><![CDATA[<h1>A New Try</h1>
+]]></content><link href="https://github.com/SylverQG/Blogs/issues/2"/><category term="ping"/><category term="filed"/><published>2023-06-15T12:56:55+00:00</published></entry><entry><id>https://github.com/SylverQG/Blogs/issues/1</id><title>A New Try as Restart</title><updated>2025-10-21T12:33:15.001736+00:00</updated><content type="html"><![CDATA[<h1>A New Try</h1>
 <p>To make blogs by the issues</p>
 <p>To say goodbye to the old world</p>
 <p>To put the ping in the e-world</p>
