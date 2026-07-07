@@ -35,3 +35,119 @@
 - 调整页面UI布局：如果是修复样式错位 → fix；如果是全新改版新增交互 → feat；如果仅调整CSS缩进格式 → style
 - 升级第三方依赖：如果是修复依赖漏洞 → fix；如果是常规版本迭代 → chore
 - 优化接口响应速度：如果是修复慢查询Bug → fix；如果是在正常逻辑基础上做性能提升 → perf
+
+
+---
+
+# 下上班git操作
+
+## ✅ 假设只关心的两个分支
+
+| 分支            | 角色                            |
+| --------------- | ------------------------------- |
+| `product`     | 公共主分支（管理员维护）        |
+| `dev`        | ✅ 你的开发分支（最终代码在这） |
+
+---
+
+## 🕔 每天下班前（固定 4 步）
+
+> 目的：**保存当天工作 + 方便第二天继续**
+
+```powershell
+# 1. 确保在 dev
+git checkout dev
+
+# 2. 提交本地修改
+git add .
+git commit -m "feat: 当天完成的功能说明"
+
+# 3. 拉取远端 dev（防止多端冲突）
+git pull origin dev
+
+# 4. 推送到远端
+git push origin dev
+```
+
+✅ 到这里就可以安心下班了
+
+---
+
+## 🌅 第二天上班第一件事（固定 3 步）
+
+> 目的：**拿到别人更新 + 对齐 product**
+
+```powershell
+# 1. 拿远端最新信息
+git fetch origin
+
+# 2. 切到 dev
+git checkout dev
+
+# 3. 把 product 的最新更新接进来（推荐）
+git rebase origin/product
+```
+
+如果有冲突：
+
+```powershell
+# 解决冲突后
+git add .
+git rebase --continue
+```
+
+最后：
+
+```powershell
+git push origin dev --force-with-lease
+```
+
+---
+
+## ✅ 每周 / 合并前必做（一次）
+
+当你准备让管理员合并时：
+
+```powershell
+git fetch origin
+git checkout dev
+git rebase origin/product
+git push origin dev --force-with-lease
+```
+
+然后通知管理员：
+
+> ✅ “dev 已 rebase 到最新 product，可以合并。”
+
+---
+
+## 🚫 永远不要做的事
+
+| 操作                         | 原因           |
+| ---------------------------- | -------------- |
+| 在 product 上开发        | 会被管理员打回 |
+| 删除 product             | 公共分支       |
+| 随意 `--force` product | 灾难           |
+| 一天不 push dev             | 风险集中       |
+
+---
+
+## 🧠 记忆口诀（很重要）
+
+> **下班：commit + push dev**
+
+> **上班：fetch + rebase product**
+
+> **合并前：rebase + force-with-lease**
+
+---
+
+## ✅ 你现在的工作流全景图
+
+```
+product（管理员）
+     ↑
+   rebase
+     ↑
+   dev（你每天在写）
+```
