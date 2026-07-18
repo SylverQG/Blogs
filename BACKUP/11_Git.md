@@ -85,7 +85,7 @@ git fetch origin
 git checkout dev
 
 # 3. 把 product 的最新更新接进来（推荐）
-git rebase origin/product
+git merge origin/product
 ```
 
 如果有冲突：
@@ -93,13 +93,13 @@ git rebase origin/product
 ```powershell
 # 解决冲突后
 git add .
-git rebase --continue
+git commit
 ```
 
 最后：
 
 ```powershell
-git push origin dev --force-with-lease
+git push origin dev
 ```
 
 ---
@@ -111,13 +111,10 @@ git push origin dev --force-with-lease
 ```powershell
 git fetch origin
 git checkout dev
-git rebase origin/product
+git merge origin/product
 git push origin dev --force-with-lease
 ```
 
-然后通知管理员：
-
-> ✅ “dev 已 rebase 到最新 product，可以合并。”
 
 ---
 
@@ -134,11 +131,9 @@ git push origin dev --force-with-lease
 
 ## 🧠 记忆口诀（很重要）
 
-> **下班：commit + push dev**
+> **上班中：commit + push dev**
 
-> **上班：fetch + rebase product**
-
-> **合并前：rebase + force-with-lease**
+> **上班前：fetch + merge product**
 
 ---
 
@@ -147,7 +142,7 @@ git push origin dev --force-with-lease
 ```
 product（管理员）
      ↑
-   rebase
+   merge
      ↑
    dev（你每天在写）
 ```
