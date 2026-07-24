@@ -2,12 +2,30 @@
 My personal blog using issues and GitHub Actions (随意转载，无需署名)
 [RSS Feed](https://raw.githubusercontent.com/SylverQG/Blogs/master/feed.xml)
 
+## [友情链接](https://github.com/SylverQG/Blogs/issues/15)
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Link</th>
+<th>Desc</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
 ## 最近更新
+- [开拓星球](https://github.com/SylverQG/Blogs/issues/15)--2026-07-24
 - [计划打算](https://github.com/SylverQG/Blogs/issues/14)--2026-07-24
 - [Baseline](https://github.com/SylverQG/Blogs/issues/13)--2026-07-18
 - [DRF](https://github.com/SylverQG/Blogs/issues/12)--2026-07-07
 - [Git](https://github.com/SylverQG/Blogs/issues/11)--2026-07-07
-- [LLM](https://github.com/SylverQG/Blogs/issues/10)--2025-10-21
 ## Python
 - [DRF](https://github.com/SylverQG/Blogs/issues/12)--2026-07-07
 - [Web Development](https://github.com/SylverQG/Blogs/issues/9)--2025-08-04
