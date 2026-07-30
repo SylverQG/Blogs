@@ -13,19 +13,19 @@ My personal blog using issues and GitHub Actions (随意转载，无需署名)
 </thead>
 <tbody>
 <tr>
-<td></td>
-<td></td>
-<td></td>
+<td>Doublc-Qluv</td>
+<td>https://doublc-qluv.github.io/</td>
+<td>随便写写</td>
 </tr>
 </tbody>
 </table>
 
 ## 最近更新
+- [Configuration and Settings](https://github.com/SylverQG/Blogs/issues/16)--2026-07-30
 - [开拓星球](https://github.com/SylverQG/Blogs/issues/15)--2026-07-24
 - [计划打算](https://github.com/SylverQG/Blogs/issues/14)--2026-07-24
 - [Baseline](https://github.com/SylverQG/Blogs/issues/13)--2026-07-18
 - [DRF](https://github.com/SylverQG/Blogs/issues/12)--2026-07-07
-- [Git](https://github.com/SylverQG/Blogs/issues/11)--2026-07-07
 ## Python
 - [DRF](https://github.com/SylverQG/Blogs/issues/12)--2026-07-07
 - [Web Development](https://github.com/SylverQG/Blogs/issues/9)--2025-08-04
