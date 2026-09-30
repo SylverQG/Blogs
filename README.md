@@ -56,6 +56,8 @@ My personal blog using issues and GitHub Actions (随意转载，无需署名)
 - [加速世界](https://github.com/SylverQG/Blogs/issues/7)--2023-10-27
 ## Git
 - [Git](https://github.com/SylverQG/Blogs/issues/11)--2026-07-07
+## Settings
+- [Configuration and Settings](https://github.com/SylverQG/Blogs/issues/16)--2026-07-30
 ## TODO
 TODO list from [计划打算](https://github.com/SylverQG/Blogs/issues/14)--1 jobs to do--0 jobs done
 - [ ] 复刻完整idea网站
